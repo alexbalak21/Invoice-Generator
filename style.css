@@ -58,7 +58,7 @@ html,body{
 }
 
 .logo{
-    max-width:180px;
+    max-width:230px;
     max-height:80px;
     margin-bottom:18px;
 }
@@ -80,7 +80,7 @@ html,body{
 
 .invoice-title h1{
     color:var(--primary);
-    font-size:40px;
+    font-size:38px;
     letter-spacing:2px;
     margin-bottom:25px;
 }
@@ -251,22 +251,38 @@ hr{
     margin:0;
 }
 
-@media print{
-    html,body{
-        background:white;
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
-    .page{
+
+    html, body {
+        background: white !important;
+    }
+
+    th {
+        background-color: var(--table-header) !important;
+    }
+
+    td {
+        background-color: inherit !important;
+    }
+
+    .page {
         width:210mm;
         min-height:297mm;
         margin:0;
         box-shadow:none;
         page-break-after:always;
     }
-    a{
+
+    a {
         color:black;
         text-decoration:none;
     }
 }
+
 
 .mt-10{margin-top:10px;}
 .mt-20{margin-top:20px;}
