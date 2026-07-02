@@ -4,36 +4,22 @@
    Print Size: A4
 ========================================================== */
 
-:root {
-
-    /* Main Colors */
-    --primary: #3771c8;
-    --primary-light: #e8f0fc;
-
-    --text: #222;
-    --text-light: #666;
-
-    --border: #b7b7b7;
-    --border-dark: #888;
-
-    --background: #ffffff;
-    --table-header: #e6ebf5;
-
-    --success: #2d9b51;
-    --danger: #c83d3d;
-
-    /* Fonts */
-    --font: "Segoe UI", Arial, Helvetica, sans-serif;
-
-    /* Sizes */
-    --page-width: 210mm;
-    --page-height: 297mm;
-
-    --radius: 4px;
-
+:root{
+    --primary:#3771c8;
+    --primary-light:#e8f0fc;
+    --text:#222;
+    --text-light:#666;
+    --border:#b7b7b7;
+    --border-dark:#888;
+    --background:#ffffff;
+    --table-header:#e6ebf5;
+    --success:#2d9b51;
+    --danger:#c83d3d;
+    --font:"Segoe UI",Arial,Helvetica,sans-serif;
+    --page-width:210mm;
+    --page-height:297mm;
+    --radius:4px;
 }
-
-/* ========================================================== */
 
 *{
     margin:0;
@@ -41,22 +27,15 @@
     box-sizing:border-box;
 }
 
-html,
-body{
-
+html,body{
     background:#ececec;
     color:var(--text);
-
     font-family:var(--font);
     font-size:14px;
     line-height:1.4;
-
 }
 
-/* ========================================================== */
-
 .page{
-
     width:var(--page-width);
     min-height:var(--page-height);
     margin:25px auto;
@@ -65,85 +44,51 @@ body{
     padding-bottom:4mm;
     box-shadow:0 8px 30px rgba(0,0,0,.15);
     position:relative;
-
 }
-
-/* ========================================================== */
 
 .header{
     display:flex;
     justify-content:space-between;
-
     align-items:flex-start;
-
     margin-bottom:45px;
-
 }
 
-/* ========================================================== */
-
 .company{
-
     width:48%;
-
 }
 
 .logo{
-
     max-width:180px;
-
     max-height:80px;
-
     margin-bottom:18px;
-
 }
 
 .company h2{
-
     font-size:24px;
-
     margin-bottom:10px;
-
 }
 
 .company p{
-
     color:var(--text-light);
-
     margin:2px 0;
-
 }
 
-/* ========================================================== */
-
 .invoice-title{
-
     width:42%;
-
     text-align:right;
-
 }
 
 .invoice-title h1{
-
     color:var(--primary);
-
     font-size:40px;
-
     letter-spacing:2px;
-
     margin-bottom:25px;
-
 }
 
-/* ========================================================== */
-
 .invoice-info{
-    
     text-align:center;
     width:100%;
     border-collapse:collapse;
-
 }
 
 .invoice-info th{
@@ -155,327 +100,173 @@ body{
 }
 
 .invoice-info td{
-
     border:1px solid var(--border-dark);
-
     text-align:center;
-
     padding:8px;
-
 }
 
-/* ========================================================== */
-
 .bill-to{
-
     margin-bottom:35px;
-
 }
 
 .section-title{
-
     display:inline-block;
-
     width:160px;
-
     background:var(--table-header);
-
     border:1px solid var(--border-dark);
-
     padding:4px 8px;
-
     font-size:12px;
-
     font-weight:bold;
-
     margin-bottom:12px;
-
 }
 
 .customer{
-
     margin-left:5px;
-
     line-height:1.6;
-
 }
 
 .customer strong{
-
     font-size:16px;
-
 }
 
-/* ========================================================== */
-
 .items{
-
     width:100%;
-
     border-collapse:collapse;
-
     margin-top:15px;
-
 }
 
 .items thead th{
-
     background:var(--table-header);
-
     border:1px solid var(--border-dark);
-
     padding:9px;
-
     font-size:13px;
-
     text-transform:uppercase;
-
 }
 
 .items tbody td{
-
     border-left:1px solid var(--border);
-
     border-right:1px solid var(--border);
-
     padding:9px;
-
 }
 
 .items tbody tr:last-child td{
-
     border-bottom:1px solid var(--border);
-
 }
 
 .items tbody tr{
-
     height:34px;
-
 }
 
 .items tbody tr:nth-child(even){
-
     background:#fafafa;
-
 }
 
-.description{
-
-    width:58%;
-
-    text-align:left;
-
-}
-
-.qty{
-
-    width:10%;
-
-}
-
-.price{
-
-    width:16%;
-
-}
-
-.amount{
-
-    width:16%;
-
-}
-
-.center{
-
-    text-align:center;
-
-}
-
-.right{
-    text-align:right;
-}
-
-/* ========================================================== */
+.description{width:58%;text-align:left;}
+.qty{width:10%;}
+.price{width:16%;}
+.amount{width:16%;}
+.center{text-align:center;}
+.right{text-align:right;}
 
 .totals{
     display:flex;
     justify-content:flex-end;
-    margin-top: 37px;
+    margin-top:37px;
 }
 
-
 .totals table{
-    width: 52%;
+    width:52%;
     border-collapse:collapse;
 }
 
 .totals td{
-
     border:1px solid var(--border);
-
     padding:10px;
-
 }
 
-.totals tr:nth-child(1){
-
-    background:#fafafa;
-
-}
-
+.totals tr:nth-child(1),
 .totals tr:nth-child(2){
-
     background:#fafafa;
-
 }
 
 .grand-total{
-
-
     color:black;
     font-weight:bold;
     font-size:17px;
-
 }
 
-
-/* ========================================================== */
-
 footer{
-
     position:absolute;
     left:18mm;
     right:18mm;
     bottom:12mm;
     text-align:center;
-
 }
 
 .thanks{
-
     font-size:20px;
-
     color:var(--primary);
-
     font-weight:600;
-
     margin-bottom:18px;
-
 }
 
 .contact{
-
     color:var(--text-light);
-
     font-size:13px;
-
 }
-
-/* ========================================================== */
 
 hr{
-
     border:none;
-
     border-top:1px solid var(--border);
-
     margin:20px 0;
-
 }
 
-/* ========================================================== */
-
 .badge{
-
     display:inline-block;
-
     padding:6px 14px;
-
     border-radius:20px;
-
     font-size:12px;
-
     font-weight:bold;
-
     text-transform:uppercase;
-
 }
 
 .badge.paid{
-
     background:var(--success);
-
     color:white;
-
 }
 
 .badge.unpaid{
-
     background:var(--danger);
-
     color:white;
-
 }
-
-/* ========================================================== */
 
 .notes{
-
     margin-top:40px;
-
     color:var(--text-light);
-
     font-size:13px;
-
 }
 
-/* ========================================================== */
-
 @page{
-
     size:A4;
-
     margin:0;
-
 }
 
 @media print{
-
-    html,
-    body{
-
+    html,body{
         background:white;
-
     }
-
     .page{
-
         width:210mm;
-
         min-height:297mm;
-
         margin:0;
-
         box-shadow:none;
-
         page-break-after:always;
-
     }
-
     a{
-
         color:black;
-
         text-decoration:none;
-
     }
-
 }
-
-/* ==========================================================
-   Optional Utility Classes
-========================================================== */
 
 .mt-10{margin-top:10px;}
 .mt-20{margin-top:20px;}
