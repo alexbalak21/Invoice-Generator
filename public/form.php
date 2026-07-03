@@ -356,6 +356,180 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	// JSON Import functionality
+	const jsonImportButton = document.getElementById('jsonImportButton');
+	const jsonImportInput = document.getElementById('jsonImportInput');
+
+	if (jsonImportButton && jsonImportInput) {
+		jsonImportButton.addEventListener('click', function() {
+			jsonImportInput.click();
+		});
+
+		jsonImportInput.addEventListener('change', function(e) {
+			const file = e.target.files[0];
+			if (!file) return;
+
+			const reader = new FileReader();
+			reader.onload = function(event) {
+				try {
+					const data = JSON.parse(event.target.result);
+					importFormData(data);
+				} catch (error) {
+					alert('Invalid JSON file: ' + error.message);
+				}
+			};
+			reader.readAsText(file);
+		});
+	}
+
+	// Import form data from JSON
+	function importFormData(data) {
+		// Import customer data
+		if (data.customer) {
+			Object.keys(data.customer).forEach(key => {
+				const input = document.querySelector(`input[name="customer[${key}]"]`);
+				if (input) input.value = data.customer[key] || '';
+			});
+		}
+
+		// Import meta data
+		if (data.meta) {
+			Object.keys(data.meta).forEach(key => {
+				const input = document.querySelector(`input[name="meta[${key}]"]`);
+				if (input) input.value = data.meta[key] || '';
+			});
+		}
+
+		// Import items
+		if (data.items && Array.isArray(data.items)) {
+			const itemsBody = document.getElementById('itemsBody');
+			itemsBody.innerHTML = '';
+			data.items.forEach((item, index) => {
+				addItemRow(item, index);
+			});
+		}
+
+		// Import notes
+		if (data.notes) {
+			if (data.notes.public) {
+				document.querySelector('textarea[name="notes[public]"]').value = data.notes.public;
+			}
+			if (data.notes.internal) {
+				document.querySelector('textarea[name="notes[internal]"]').value = data.notes.internal;
+			}
+		}
+
+		// Import acceptance data
+		if (data.acceptance) {
+			const acceptanceCheckbox = document.querySelector('input[name="acceptance[enabled]"]');
+			if (acceptanceCheckbox && data.acceptance.enabled) {
+				acceptanceCheckbox.checked = true;
+			}
+			const acceptanceText = document.querySelector('textarea[name="acceptance[text]"]');
+			if (acceptanceText && data.acceptance.text) {
+				acceptanceText.value = data.acceptance.text;
+			}
+		}
+
+		// Reset file input
+		jsonImportInput.value = '';
+		
+		// Trigger totals recalculation
+		updateFormTotals();
+	}
+
+	// Add item row with data
+	function addItemRow(item, index) {
+		const template = document.getElementById('itemRowTemplate');
+		const row = template.content.cloneNode(true);
+		const itemRow = row.querySelector('[data-item-row]');
+		
+		// Update all input names to use correct index
+		row.querySelectorAll('input').forEach(input => {
+			const name = input.name.replace('__INDEX__', index);
+			input.name = name;
+		});
+
+		// Fill in values
+		if (item.reference) row.querySelector('input[name*="reference"]').value = item.reference;
+		if (item.description) row.querySelector('input[name*="description"]').value = item.description;
+		if (item.quantity) row.querySelector('input[name*="quantity"]').value = item.quantity;
+		if (item.unit) row.querySelector('input[name*="unit"]').value = item.unit;
+		if (item.discount) row.querySelector('input[name*="discount"]').value = item.discount;
+		if (item.unit_price) row.querySelector('input[name*="unit_price"]').value = item.unit_price;
+		if (item.vat_rate !== undefined) row.querySelector('input[name*="vat_rate"]').value = item.vat_rate;
+
+		// Add remove button functionality
+		const removeBtn = row.querySelector('[data-remove-row]');
+		if (removeBtn) {
+			removeBtn.addEventListener('click', function() {
+				this.closest('[data-item-row]').remove();
+				updateFormTotals();
+			});
+		}
+
+		document.getElementById('itemsBody').appendChild(row);
+	}
+
+	// Update form totals preview
+	function updateFormTotals() {
+		const form = document.getElementById('documentForm');
+		const defaultVat = parseFloat(form.dataset.defaultVat) || 0;
+		const currencySymbol = form.dataset.currencySymbol || '€';
+		
+		const items = [];
+		document.querySelectorAll('[data-item-row]').forEach(row => {
+			const quantity = parseFloat(row.querySelector('input[name*="quantity"]').value) || 0;
+			const unitPrice = parseFloat(row.querySelector('input[name*="unit_price"]').value) || 0;
+			const discount = parseFloat(row.querySelector('input[name*="discount"]').value) || 0;
+			const vatRate = parseFloat(row.querySelector('input[name*="vat_rate"]').value) || defaultVat;
+			
+			const subtotal = (quantity * unitPrice) - discount;
+			items.push({ subtotal, vatRate });
+		});
+
+		let totalSubtotal = 0;
+		let totalVat = 0;
+		
+		items.forEach(item => {
+			totalSubtotal += item.subtotal;
+			totalVat += item.subtotal * (item.vatRate / 100);
+		});
+
+		const grandTotal = totalSubtotal + totalVat;
+
+		// Update display
+		const formatMoney = (value) => {
+			return currencySymbol + ' ' + value.toFixed(2).replace('.', ',');
+		};
+
+		document.getElementById('previewSubtotal').textContent = formatMoney(totalSubtotal);
+		document.getElementById('previewVat').textContent = formatMoney(totalVat);
+		document.getElementById('previewGrandTotal').textContent = formatMoney(grandTotal);
+	}
+
+	// Add item button handler
+	const addItemButton = document.getElementById('addItemButton');
+	if (addItemButton) {
+		addItemButton.addEventListener('click', function() {
+			const itemsBody = document.getElementById('itemsBody');
+			const newIndex = itemsBody.children.length;
+			addItemRow({}, newIndex);
+			updateFormTotals();
+		});
+	}
+
+	// Add listener to all numeric fields for totals update
+	document.addEventListener('change', function(e) {
+		if (e.target.closest('[data-item-row]') && e.target.dataset.field) {
+			updateFormTotals();
+		}
+	});
+});
+</script>
+
 <!-- ===== Product Picker Modal ===== -->
 <div class="modal fade" id="productPickerModal" tabindex="-1" aria-labelledby="productPickerLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-scrollable">

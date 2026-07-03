@@ -1,0 +1,56 @@
+{
+  "type": "invoice",
+  "customer": {
+    "name": "Prof. Dr. Suresh Kumar Rayala",
+    "company": "Indian Institute of Technology Madras",
+    "department": "Department of Biotechnology",
+    "street": "Chennai, Tamil Nadu",
+    "city": "Chennai",
+    "zip": "600036",
+    "country": "India",
+    "phone": "",
+    "email": "abiramiseetharaman@gmail.com",
+    "vat_number": "33AAAA13615G1Z6"
+  },
+  "meta": {
+    "number": "INV-2026-0703",
+    "issue_date": "2026-07-03",
+    "due_date": "2026-07-03",
+    "reference": "",
+    "payment_method": "Bank Transfer (Wire)",
+    "payment_terms": "100% Advance Payment",
+    "currency": "INR",
+    "currency_symbol": "₹",
+    "vat_mention": "VAT not applicable – export outside the European Union (Article 259 of the French Tax Code)",
+    "incoterms": "DAP Chennai (FedEx account provided by client)",
+    "hsn_code": "3822"
+  },
+  "items": [
+    {
+      "reference": "K0307-01",
+      "description": "PRECICE dCK Phosphorylation Assay Kit (1 plate, 96 assays)",
+      "quantity": 1,
+      "unit": "pcs",
+      "unit_price": 530.00,
+      "discount": 0,
+      "vat_rate": 0
+    },
+    {
+      "reference": "SHIP",
+      "description": "International Shipping - FedEx (DAP Chennai)",
+      "quantity": 1,
+      "unit": "service",
+      "unit_price": 0,
+      "discount": 0,
+      "vat_rate": 0
+    }
+  ],
+  "notes": {
+    "public": "Kits are in stock. Goods will be dispatched within 2 business days after receipt of 100% advance payment.",
+    "internal": "Client requires Land Border form and bank details."
+  },
+  "acceptance": {
+    "enabled": false,
+    "text": "Quote received before execution, read and approved, agreed."
+  }
+}
