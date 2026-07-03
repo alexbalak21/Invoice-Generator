@@ -33,6 +33,9 @@ $company = require __DIR__ . '/../config/company.php';
                 </div>
             </div>
 
+            <div class="d-flex justify-content-end mb-3">
+                <a class="btn btn-outline-secondary btn-sm" href="history.php">&#128196; View History</a>
+            </div>
             <div class="row g-4">
                 <div class="col-md-6">
                     <a class="action-card action-card-invoice h-100 text-decoration-none" href="invoice.php">

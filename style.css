@@ -631,3 +631,16 @@ body.dashboard-shell > .container{
         margin-right:16px;
     }
 }
+
+/* History / saved badge in toolbar */
+.toolbar-saved-badge {
+    display: inline-block;
+    margin-left: .75rem;
+    padding: .15rem .55rem;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 600;
+    background: #d1fae5;
+    color: #065f46;
+    vertical-align: middle;
+}

@@ -39,5 +39,9 @@ if (!empty($errors)) {
 $_SESSION['document_preview'] = $document;
 $_SESSION['document_preview']['show_toolbar'] = true;
 
+// ── Persist to DB (insert or update by document number) ──
+$savedId = DocumentRepository::save($document);
+$_SESSION['document_preview']['db_id'] = $savedId ?: null;
+
 header('Location: preview.php');
 exit;

@@ -218,7 +218,10 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 					<div class="card-body p-4">
 						<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
 							<h2 class="h5 mb-0">Items</h2>
-							<button type="button" class="btn btn-outline-primary btn-sm" id="addItemButton">Add row</button>
+							<div class="d-flex gap-2">
+								<button type="button" class="btn btn-outline-secondary btn-sm" id="addProductButton">&#43; From catalogue</button>
+								<button type="button" class="btn btn-outline-primary btn-sm" id="addItemButton">&#43; Custom row</button>
+							</div>
 						</div>
 
 						<div class="table-responsive">
@@ -313,220 +316,82 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 	</form>
 </div>
 
-<script>
-(function () {
-	const form = document.getElementById('documentForm');
-	const body = document.getElementById('itemsBody');
-	const template = document.getElementById('itemRowTemplate');
-	const addButton = document.getElementById('addItemButton');
-	const importButton = document.getElementById('jsonImportButton');
-	const importInput = document.getElementById('jsonImportInput');
-	const previewSubtotal = document.getElementById('previewSubtotal');
-	const previewVat = document.getElementById('previewVat');
-	const previewGrandTotal = document.getElementById('previewGrandTotal');
-	const typeInput = form.querySelector('input[name="type"]');
-	const invoiceField = form.querySelector('[data-invoice-field]');
-	const quoteField = form.querySelector('[data-quote-field]');
-	const currencySymbol = form.dataset.currencySymbol || '€';
-	const defaultItemTemplate = {
-		reference: '',
-		description: '',
-		quantity: 1,
-		unit_price: 0,
-		vat_rate: form.dataset.defaultVat || 0,
-		unit: '',
-		discount: 0,
-	};
 
-	function getFieldByName(name) {
-		return Array.from(form.elements).find((element) => element.name === name) || null;
-	}
+<!-- ===== Product Picker Modal ===== -->
+<div class="modal fade" id="productPickerModal" tabindex="-1" aria-labelledby="productPickerLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="productPickerLabel">Add from catalogue</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			</div>
+			<div class="modal-body">
+				<div class="mb-3">
+					<input type="search" id="productSearch" class="form-control" placeholder="Search by reference or name…" autocomplete="off">
+				</div>
+				<div id="productPickerStatus" class="text-muted small mb-2"></div>
+				<div class="table-responsive">
+					<table class="table table-hover table-sm align-middle" id="productPickerTable">
+						<thead class="table-light">
+							<tr>
+								<th>Reference</th>
+								<th>Name</th>
+								<th>Size / Format</th>
+								<th class="text-end">Unit price</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody id="productPickerBody">
+							<tr><td colspan="5" class="text-center text-muted py-4">Loading…</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 
-	function setFieldValue(name, value) {
-		const field = getFieldByName(name);
-		if (!field) {
-			return;
-		}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-		if (field.type === 'checkbox') {
-			field.checked = Boolean(value);
-			return;
-		}
+<!-- ===== Product Picker Modal ===== -->
+<div class="modal fade" id="productPickerModal" tabindex="-1" aria-labelledby="productPickerLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="productPickerLabel">Add from catalogue</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			</div>
+			<div class="modal-body">
+				<div class="mb-3">
+					<input type="search" id="productSearch" class="form-control" placeholder="Search by reference or name…" autocomplete="off">
+				</div>
+				<div id="productPickerStatus" class="text-muted small mb-2"></div>
+				<div class="table-responsive">
+					<table class="table table-hover table-sm align-middle" id="productPickerTable">
+						<thead class="table-light">
+							<tr>
+								<th>Reference</th>
+								<th>Name</th>
+								<th>Size / Format</th>
+								<th class="text-end">Unit price</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody id="productPickerBody">
+							<tr><td colspan="5" class="text-center text-muted py-4">Loading…</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 
-		field.value = value ?? '';
-	}
-
-	function applyDocumentType(nextType) {
-		const resolvedType = nextType === 'quote' ? 'quote' : 'invoice';
-		typeInput.value = resolvedType;
-
-		if (invoiceField) {
-			invoiceField.classList.toggle('d-none', resolvedType === 'quote');
-		}
-
-		if (quoteField) {
-			quoteField.classList.toggle('d-none', resolvedType === 'invoice');
-		}
-	}
-
-	function money(value) {
-		return currencySymbol + ' ' + Number(value || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-	}
-
-	function updateRowNames() {
-		Array.from(body.querySelectorAll('tr[data-item-row]')).forEach((row, index) => {
-			row.querySelectorAll('[name]').forEach((input) => {
-				input.name = input.name.replace(/items\[(.*?)\]/, 'items[' + index + ']');
-			});
-		});
-	}
-
-	function addRow() {
-		const index = body.querySelectorAll('tr[data-item-row]').length;
-		const fragment = template.content.cloneNode(true);
-		fragment.querySelectorAll('[name]').forEach((input) => {
-			input.name = input.name.replace(/__INDEX__/g, index);
-		});
-		body.appendChild(fragment);
-		updateRowNames();
-		updateTotals();
-	}
-
-	function removeRow(button) {
-		const row = button.closest('tr[data-item-row]');
-		if (!row) {
-			return;
-		}
-
-		if (body.querySelectorAll('tr[data-item-row]').length <= 1) {
-			row.querySelectorAll('input').forEach((input) => {
-				if (input.type === 'number') {
-					input.value = input.name.includes('[quantity]') ? 1 : 0;
-				} else {
-					input.value = '';
-				}
-			});
-			updateTotals();
-			return;
-		}
-
-		row.remove();
-		updateRowNames();
-		updateTotals();
-	}
-
-	function syncItemRows(items) {
-		const rows = Array.from(body.querySelectorAll('tr[data-item-row]'));
-		const targetItems = Array.isArray(items) && items.length ? items : [defaultItemTemplate];
-
-		while (rows.length < targetItems.length) {
-			addRow();
-			rows.push(body.querySelector('tr[data-item-row]:last-child'));
-		}
-
-		while (rows.length > targetItems.length && rows.length > 1) {
-			const row = rows.pop();
-			row.remove();
-		}
-
-		updateRowNames();
-
-		Array.from(body.querySelectorAll('tr[data-item-row]')).forEach((row, index) => {
-			const item = targetItems[index] || {};
-			const referenceField = row.querySelector('[name$="[reference]"]');
-			const descriptionField = row.querySelector('[name$="[description]"]');
-			const quantityField = row.querySelector('[name$="[quantity]"]');
-			const unitField = row.querySelector('[name$="[unit]"]');
-			const unitPriceField = row.querySelector('[name$="[unit_price]"]');
-			const discountField = row.querySelector('[name$="[discount]"]');
-			const vatRateField = row.querySelector('[name$="[vat_rate]"]');
-
-			if (referenceField) referenceField.value = item.reference ?? '';
-			if (descriptionField) descriptionField.value = item.description ?? '';
-			if (quantityField) quantityField.value = item.quantity ?? 1;
-			if (unitField) unitField.value = item.unit ?? '';
-			if (unitPriceField) unitPriceField.value = item.unit_price ?? 0;
-			if (discountField) discountField.value = item.discount ?? 0;
-			if (vatRateField) vatRateField.value = item.vat_rate ?? form.dataset.defaultVat ?? 0;
-		});
-	}
-
-	function populateForm(documentData) {
-		if (!documentData || typeof documentData !== 'object') {
-			return;
-		}
-
-		applyDocumentType(documentData.type || typeInput.value);
-
-		['customer', 'meta', 'notes', 'acceptance'].forEach((section) => {
-			const sectionData = documentData[section];
-			if (!sectionData || typeof sectionData !== 'object') {
-				return;
-			}
-
-			Object.entries(sectionData).forEach(([key, value]) => {
-				setFieldValue(section + '[' + key + ']', value);
-			});
-		});
-
-		syncItemRows(documentData.items);
-		updateTotals();
-	}
-
-	async function importJsonFile(file) {
-		const text = await file.text();
-		const documentData = JSON.parse(text);
-		populateForm(documentData);
-	}
-
-	function updateTotals() {
-		let subtotal = 0;
-		let vat = 0;
-
-		body.querySelectorAll('tr[data-item-row]').forEach((row) => {
-			const quantity = parseFloat(row.querySelector('[data-field="quantity"]').value || '0');
-			const unitPrice = parseFloat(row.querySelector('[data-field="unit_price"]').value || '0');
-			const discount = parseFloat(row.querySelector('[data-field="discount"]').value || '0');
-			const vatRate = parseFloat(row.querySelector('[data-field="vat_rate"]').value || '0');
-			const lineTotal = Math.max(0, (quantity * unitPrice) - discount);
-
-			subtotal += lineTotal;
-			vat += lineTotal * (vatRate / 100);
-		});
-
-		previewSubtotal.textContent = money(subtotal);
-		previewVat.textContent = money(vat);
-		previewGrandTotal.textContent = money(subtotal + vat);
-	}
-
-	body.addEventListener('input', updateTotals);
-	body.addEventListener('click', (event) => {
-		if (event.target.matches('[data-remove-row]')) {
-			event.preventDefault();
-			removeRow(event.target);
-		}
-	});
-
-	addButton.addEventListener('click', addRow);
-	if (importButton && importInput) {
-		importButton.addEventListener('click', () => importInput.click());
-		importInput.addEventListener('change', async () => {
-			const file = importInput.files && importInput.files[0];
-			if (!file) {
-				return;
-			}
-
-			try {
-				await importJsonFile(file);
-			} catch (error) {
-				window.alert('Invalid JSON file. Please upload a formatted document export.');
-			} finally {
-				importInput.value = '';
-			}
-		});
-	}
-	updateTotals();
-})();
-</script>
 </body>
 </html>
