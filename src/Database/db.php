@@ -28,9 +28,17 @@ function get_db(): ?PDO
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
         ]);
+
+        Logger::info('Database connection established', [
+            'host'   => $cfg['host'],
+            'dbname' => $cfg['dbname'],
+        ]);
     } catch (PDOException $e) {
-        // Return null so callers can gracefully degrade (form still works without DB)
-        error_log('DB connection failed: ' . $e->getMessage());
+        Logger::error('Database connection failed', [
+            'host'    => $cfg['host'],
+            'dbname'  => $cfg['dbname'],
+            'message' => $e->getMessage(),
+        ]);
         $pdo = null;
     }
 

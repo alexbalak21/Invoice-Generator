@@ -16,6 +16,7 @@ class DocumentRepository
     {
         $db = get_db();
         if ($db === null) {
+            Logger::error('DocumentRepository::save — no DB connection');
             return false;
         }
 
@@ -32,7 +33,8 @@ class DocumentRepository
         );
 
         if ($number === '') {
-            return false; // number is required
+            Logger::warning('DocumentRepository::save — missing document number, aborting');
+            return false;
         }
 
         $issueDate  = $meta['issue_date']  ?? date('Y-m-d');
@@ -47,8 +49,6 @@ class DocumentRepository
         $totalTtc  = (float) ($totals['grand_total'] ?? 0);
         $currency  = $meta['currency'] ?? 'EUR';
 
-        // Always store totals in the base accounting currency (EUR) for consistent
-        // history reporting. If the document is in a foreign currency, convert back.
         $fxRate       = max(0.000001, (float) ($meta['fx_rate'] ?? 1));
         $baseCurrency = $meta['fx_base_currency'] ?? 'EUR';
         if ($currency !== $baseCurrency && $fxRate > 0 && $fxRate !== 1.0) {
@@ -90,9 +90,24 @@ class DocumentRepository
                 ':payload'        => $payload,
             ]);
 
-            return (int) $db->lastInsertId() ?: self::findIdByNumber($type, $number);
+            $id = (int) $db->lastInsertId() ?: self::findIdByNumber($type, $number);
+
+            Logger::info('Document saved', [
+                'type'     => $type,
+                'number'   => $number,
+                'customer' => $customer,
+                'id'       => $id,
+                'total_ttc' => $totalTtc,
+                'currency' => $currency,
+            ]);
+
+            return $id;
         } catch (PDOException $e) {
-            error_log('DocumentRepository::save failed: ' . $e->getMessage());
+            Logger::error('DocumentRepository::save query failed', [
+                'type'    => $type,
+                'number'  => $number,
+                'message' => $e->getMessage(),
+            ]);
             return false;
         }
     }
@@ -105,6 +120,7 @@ class DocumentRepository
     {
         $db = get_db();
         if ($db === null) {
+            Logger::warning('DocumentRepository::list — no DB connection', ['type' => $type]);
             return [];
         }
 
@@ -123,9 +139,21 @@ class DocumentRepository
             $stmt->bindValue(':limit',  $limit,  PDO::PARAM_INT);
             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
             $stmt->execute();
-            return $stmt->fetchAll();
+            $rows = $stmt->fetchAll();
+
+            Logger::info('DocumentRepository::list', [
+                'type'   => $type,
+                'count'  => count($rows),
+                'limit'  => $limit,
+                'offset' => $offset,
+            ]);
+
+            return $rows;
         } catch (PDOException $e) {
-            error_log('DocumentRepository::list failed: ' . $e->getMessage());
+            Logger::error('DocumentRepository::list query failed', [
+                'type'    => $type,
+                'message' => $e->getMessage(),
+            ]);
             return [];
         }
     }
@@ -138,6 +166,7 @@ class DocumentRepository
     {
         $db = get_db();
         if ($db === null) {
+            Logger::warning('DocumentRepository::load — no DB connection', ['type' => $type, 'id' => $id]);
             return null;
         }
 
@@ -149,13 +178,21 @@ class DocumentRepository
             $row = $stmt->fetch();
 
             if (!$row) {
+                Logger::warning('DocumentRepository::load — not found', ['type' => $type, 'id' => $id]);
                 return null;
             }
 
             $doc = json_decode($row['payload'], true);
+
+            Logger::info('Document loaded', ['type' => $type, 'id' => $id]);
+
             return is_array($doc) ? $doc : null;
         } catch (PDOException $e) {
-            error_log('DocumentRepository::load failed: ' . $e->getMessage());
+            Logger::error('DocumentRepository::load query failed', [
+                'type'    => $type,
+                'id'      => $id,
+                'message' => $e->getMessage(),
+            ]);
             return null;
         }
     }
@@ -168,6 +205,7 @@ class DocumentRepository
     {
         $db = get_db();
         if ($db === null) {
+            Logger::warning('DocumentRepository::delete — no DB connection', ['type' => $type, 'id' => $id]);
             return false;
         }
 
@@ -176,9 +214,21 @@ class DocumentRepository
         try {
             $stmt = $db->prepare("DELETE FROM `{$table}` WHERE `id` = :id");
             $stmt->execute([':id' => $id]);
-            return $stmt->rowCount() > 0;
+            $deleted = $stmt->rowCount() > 0;
+
+            if ($deleted) {
+                Logger::info('Document deleted', ['type' => $type, 'id' => $id]);
+            } else {
+                Logger::warning('DocumentRepository::delete — row not found', ['type' => $type, 'id' => $id]);
+            }
+
+            return $deleted;
         } catch (PDOException $e) {
-            error_log('DocumentRepository::delete failed: ' . $e->getMessage());
+            Logger::error('DocumentRepository::delete query failed', [
+                'type'    => $type,
+                'id'      => $id,
+                'message' => $e->getMessage(),
+            ]);
             return false;
         }
     }

@@ -9,21 +9,35 @@ $action = $_GET['action'] ?? '';
 $type   = in_array($_GET['type'] ?? '', ['invoice', 'quote'], true) ? $_GET['type'] : 'invoice';
 $id     = (int) ($_GET['id'] ?? 0);
 
+if ($action !== '') {
+    Logger::info('history.php — action requested', [
+        'action' => $action,
+        'type'   => $type,
+        'id'     => $id,
+        'ip'     => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+    ]);
+}
+
 // Regenerate: load payload → push to session → redirect to preview
 if ($action === 'view' && $id > 0) {
     $doc = DocumentRepository::load($type, $id);
     if ($doc) {
         $doc['show_toolbar'] = true;
         $_SESSION['document_preview'] = $doc;
+        Logger::info('history.php — document loaded for preview', ['type' => $type, 'id' => $id]);
         header('Location: preview.php');
         exit;
     }
+    Logger::warning('history.php — document not found for view', ['type' => $type, 'id' => $id]);
     $flashError = 'Document not found.';
 }
 
 // Delete
 if ($action === 'delete' && $id > 0 && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    DocumentRepository::delete($type, $id);
+    $deleted = DocumentRepository::delete($type, $id);
+    if (!$deleted) {
+        Logger::warning('history.php — delete had no effect', ['type' => $type, 'id' => $id]);
+    }
     header('Location: history.php?deleted=1');
     exit;
 }
@@ -31,6 +45,10 @@ if ($action === 'delete' && $id > 0 && $_SERVER['REQUEST_METHOD'] === 'POST') {
 // ── Load lists ───────────────────────────────────────────────────────────
 $db = get_db();
 $dbAvailable = $db !== null;
+
+if (!$dbAvailable) {
+    Logger::warning('history.php — DB unavailable, rendering empty history');
+}
 
 $invoices = $dbAvailable ? DocumentRepository::list('invoice') : [];
 $quotes   = $dbAvailable ? DocumentRepository::list('quote')   : [];
