@@ -1,3 +1,3 @@
 <?php
-header('Location: form.php?type=invoice');
-exit;
+
+require __DIR__ . '/public/invoice.php';

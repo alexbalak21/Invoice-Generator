@@ -1,3 +1,3 @@
 <?php
-header('Location: form.php?type=quote');
-exit;
+
+require __DIR__ . '/public/quote.php';
