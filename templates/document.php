@@ -34,7 +34,8 @@ $latePaymentFee = (float) ($company["late_payment_flat_fee"] ?? 0);
 // Default to true when the key is absent (e.g. documents saved before this option existed).
 $showLatePayment = !array_key_exists("show_late_payment", $legal) || !empty($legal["show_late_payment"]);
 $logoPath = $company["logo"] ?? "img/logo.png";
-$logoFile = __DIR__ . DIRECTORY_SEPARATOR . str_replace(["/", "\\"], DIRECTORY_SEPARATOR, ltrim($logoPath, "/\\"));
+$logoFile = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . str_replace(["/", "\\"], DIRECTORY_SEPARATOR, ltrim($logoPath, "/\\"));
+$logoUrl = '/' . ltrim($logoPath, "/\\");
 $logoAvailable = is_file($logoFile);
 ?>
 <!DOCTYPE html>
@@ -87,7 +88,7 @@ if ($showToolbar): ?>
 
 		<div class="company">
 			<?php if ($logoAvailable): ?>
-				<img src="<?= h($logoPath) ?>" class="logo" alt="Logo">
+				<img src="<?= h($logoUrl) ?>" class="logo" alt="Logo">
 			<?php endif; ?>
 			<h2><?= h($company["name"] ?? "") ?></h2>
 			<p><?= h($company["street"] ?? "") ?></p>
@@ -182,7 +183,8 @@ if ($showToolbar): ?>
 	<table class="items">
 		<thead>
 			<tr>
-				<th class="description">DESCRIPTION</th>
+				<th class="name">NAME</th>
+				<th class="reference">REFERENCE</th>
 				<th class="qty">QTY</th>
 				<th class="price">UNIT PRICE</th>
 				<th class="amount">AMOUNT</th>
@@ -191,12 +193,8 @@ if ($showToolbar): ?>
 		<tbody>
 		<?php foreach ($items as $item): ?>
 			<tr>
-				<td>
-					<?php if (!empty($item["reference"])): ?>
-						<div class="item-reference"><?= h($item["reference"]) ?></div>
-					<?php endif; ?>
-					<?= h($item["description"] ?? "") ?>
-				</td>
+				<td class="name"><?= h($item["description"] ?? "") ?></td>
+				<td class="reference"><?= h($item["reference"] ?? "") ?></td>
 				<td class="center"><?= h($item["quantity"] ?? 0) ?><?php if (!empty($item["unit"])): ?> <?= h($item["unit"]) ?><?php endif; ?></td>
 				<td class="right"><?= money($item["unit_price"] ?? 0, $currencySymbol) ?></td>
 				<td class="right"><?= money((($item["quantity"] ?? 0) * ($item["unit_price"] ?? 0)) - ($item["discount"] ?? 0), $currencySymbol) ?></td>

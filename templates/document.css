@@ -165,12 +165,13 @@ html, body {
 .items tbody tr               { height: 26px; }
 .items tbody tr:nth-child(even) { background: #fafafa; }
 
-.description { width: 58%; text-align: left; }
-.qty         { width: 10%; }
-.price       { width: 16%; }
-.amount      { width: 16%; }
-.center      { text-align: center; }
-.right       { text-align: right; }
+.name       { width: 42%; text-align: left; }
+.reference  { width: 18%; text-align: left; }
+.qty        { width: 10%; }
+.price      { width: 15%; }
+.amount     { width: 15%; }
+.center     { text-align: center; }
+.right      { text-align: right; }
 
 /* ── Totals ────────────────────────────────────────────── */
 
@@ -181,7 +182,7 @@ html, body {
 .totals tr:nth-child(1),
 .totals tr:nth-child(2) { background: #fafafa; }
 
-.grand-total { color: black; font-weight: bold; font-size: 17px; }
+.grand-total { color: black; font-weight: bold; font-size: 15px !important; }
 
 /* ── Badges ────────────────────────────────────────────── */
 

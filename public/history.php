@@ -52,7 +52,7 @@ function fmtDate(string $date): string {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Document History</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/app.css">
     <style>
         .badge-invoice { background: #dbeafe; color: #1e40af; }
@@ -255,7 +255,7 @@ function fmtDate(string $date): string {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 // Wire up delete modal
 document.getElementById('confirmDelete').addEventListener('show.bs.modal', function(e) {
