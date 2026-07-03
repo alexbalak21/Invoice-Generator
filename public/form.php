@@ -72,8 +72,11 @@ $notes = $state['notes'] ?? [
 	'internal' => '',
 ];
 
-$currency = $meta['currency'] ?: ($company['default_currency'] ?? 'EUR');
-$currencySymbol = $meta['currency_symbol'] ?: ($company['default_currency_symbol'] ?? '€');
+// The company always bills in its own accounting currency, no matter what currency
+// a customer's PO or an imported JSON file happens to use — so this is never taken
+// from $meta / imported data, only from the company config.
+$currency = $company['default_currency'] ?? 'EUR';
+$currencySymbol = $company['default_currency_symbol'] ?? '€';
 $defaultVatRate = (float) ($company['default_vat_rate'] ?? 0);
 $totals = calculate_totals($defaultItems, $defaultVatRate);
 ?>
@@ -84,7 +87,7 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><?= h(document_title($type)) ?> Form</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="../style.css">
+	<link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body class="app-shell">
 <div class="container py-4 py-md-5">
@@ -196,11 +199,12 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 							</div>
 							<div class="col-md-4">
 								<label class="form-label">Currency</label>
-								<input class="form-control" type="text" name="meta[currency]" value="<?= h($currency) ?>">
+								<input class="form-control" type="text" name="meta[currency]" value="<?= h($currency) ?>" readonly>
+								<div class="form-text">Locked to the company currency — amounts are always billed in <?= h($currency) ?>, even if an imported JSON specifies another currency.</div>
 							</div>
 							<div class="col-md-4">
 								<label class="form-label">Currency symbol</label>
-								<input class="form-control" type="text" name="meta[currency_symbol]" value="<?= h($currencySymbol) ?>">
+								<input class="form-control" type="text" name="meta[currency_symbol]" value="<?= h($currencySymbol) ?>" readonly>
 							</div>
 							<div class="col-md-4">
 								<label class="form-label">Payment terms</label>
@@ -209,6 +213,13 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 							<div class="col-md-12">
 								<label class="form-label">VAT mention</label>
 								<input class="form-control" type="text" name="meta[vat_mention]" value="<?= h($meta['vat_mention'] ?? '') ?>">
+							</div>
+							<div class="col-12 <?= $type === 'quote' ? 'd-none' : '' ?>" data-invoice-field>
+								<label class="form-check-label">
+									<input class="form-check-input me-2" type="checkbox" name="legal[show_late_payment]" value="1" <?= (!isset($state['legal']['show_late_payment']) || !empty($state['legal']['show_late_payment'])) ? 'checked' : '' ?>>
+									Include late payment penalty &amp; recovery fee mention
+								</label>
+								<div class="form-text">"In the event of late payment, penalties will apply at a rate of 4.50% per year. A fixed recovery fee of 40.00 € may also apply." Untick to leave this out of the document.</div>
 							</div>
 						</div>
 					</div>
@@ -396,7 +407,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		// Import meta data
 		if (data.meta) {
+			// Currency is locked to the company's own accounting currency (EUR) and must
+			// never be overwritten by an imported JSON file, which may be denominated
+			// in the customer's local currency (e.g. INR).
+			const lockedFields = ['currency', 'currency_symbol'];
 			Object.keys(data.meta).forEach(key => {
+				if (lockedFields.includes(key)) return;
 				const input = document.querySelector(`input[name="meta[${key}]"]`);
 				if (input) input.value = data.meta[key] || '';
 			});

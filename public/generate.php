@@ -30,6 +30,7 @@ if (!empty($errors)) {
         'items' => $document['items'],
         'notes' => $document['notes'],
         'acceptance' => $document['acceptance'],
+        'legal' => $document['legal'],
     ];
 
     header('Location: form.php?type=' . urlencode($type));

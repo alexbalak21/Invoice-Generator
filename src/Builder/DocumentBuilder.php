@@ -32,8 +32,11 @@ class DocumentBuilder
             $meta['valid_until'] = add_days_to_date($meta['issue_date'], (int) ($company['default_quote_valid_days'] ?? 30));
         }
 
-        $meta['currency'] = $meta['currency'] ?: $defaultCurrency;
-        $meta['currency_symbol'] = $meta['currency_symbol'] ?: $defaultCurrencySymbol;
+        // The company always invoices/quotes in its own accounting currency (EUR),
+        // regardless of what currency a customer's PO / imported JSON is denominated in.
+        // Amounts are entered as-is and simply labelled with the company currency below.
+        $meta['currency'] = $defaultCurrency;
+        $meta['currency_symbol'] = $defaultCurrencySymbol;
         $meta['payment_method'] = $meta['payment_method'] ?: ($company['default_payment_method'] ?? 'Bank Transfer');
 
         $totals = DocumentCalculator::calculateTotals($items, $defaultVatRate);
@@ -68,6 +71,8 @@ class DocumentBuilder
                 'late_payment' => sanitize_input($company['late_payment_text'] ?? ''),
                 'recovery_fee' => sanitize_input($company['late_payment_fee_text'] ?? ''),
                 'terms' => sanitize_input($company['terms_text'] ?? ''),
+                // Optional: include the late-payment penalty / recovery fee mention on invoices.
+                'show_late_payment' => !empty($post['legal']['show_late_payment']),
             ],
             'notes' => [
                 'public' => sanitize_input($notes['public'] ?? ''),

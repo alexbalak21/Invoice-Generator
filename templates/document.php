@@ -31,6 +31,8 @@ $paymentMethod = $payment["method"] ?? ($metadata["payment_method"] ?? "");
 $paymentTerms = $payment["payment_terms"] ?? "";
 $latePaymentRate = (float) ($company["late_payment_rate"] ?? 0);
 $latePaymentFee = (float) ($company["late_payment_flat_fee"] ?? 0);
+// Default to true when the key is absent (e.g. documents saved before this option existed).
+$showLatePayment = !array_key_exists("show_late_payment", $legal) || !empty($legal["show_late_payment"]);
 $logoPath = $company["logo"] ?? "img/logo.png";
 $logoFile = __DIR__ . DIRECTORY_SEPARATOR . str_replace(["/", "\\"], DIRECTORY_SEPARATOR, ltrim($logoPath, "/\\"));
 $logoAvailable = is_file($logoFile);
@@ -41,7 +43,7 @@ $logoAvailable = is_file($logoFile);
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><?= h($title) ?> <?= h($metadata["number"] ?? "") ?></title>
-	<link rel="stylesheet" href="../style.css">
+	<link rel="stylesheet" href="../templates/document.css">
 </head>
 <body class="document-page">
 
@@ -243,12 +245,14 @@ if ($showToolbar): ?>
 		<div class="payment-terms-block">
 			<strong>Payment terms:</strong>
 			Due date: <?= h($secondaryDate) ?><?= !empty($paymentMethod) ? " — " . h($paymentMethod) . "." : "." ?><br>
-			<?php if ($latePaymentRate > 0): ?>
-				In the event of late payment, penalties will apply at a rate of
-				<strong><?= number_format($latePaymentRate, 2) ?>%</strong> per year.
-			<?php endif; ?>
-			<?php if ($latePaymentFee > 0): ?>
-				A fixed recovery fee of <strong><?= h(number_format($latePaymentFee, 2)) ?> <?= h($currencySymbol) ?></strong> may also apply.
+			<?php if ($showLatePayment): ?>
+				<?php if ($latePaymentRate > 0): ?>
+					In the event of late payment, penalties will apply at a rate of
+					<strong><?= number_format($latePaymentRate, 2) ?>%</strong> per year.
+				<?php endif; ?>
+				<?php if ($latePaymentFee > 0): ?>
+					A fixed recovery fee of <strong><?= h(number_format($latePaymentFee, 2)) ?> <?= h($currencySymbol) ?></strong> may also apply.
+				<?php endif; ?>
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
