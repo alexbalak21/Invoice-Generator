@@ -161,12 +161,6 @@ body.dashboard-shell > .container{
     border-radius:20px;
 }
 
-.document-form .form-control,
-.document-form .form-select,
-.document-form .btn{
-    border-radius:12px;
-}
-
 .document-form .items-editor thead th{
     font-size:12px;
     text-transform:uppercase;
@@ -211,4 +205,3 @@ body.dashboard-shell > .container{
 
 /* Small helpers used by the app */
 .document-form .card{border-radius:20px}
-.document-form .form-control,.document-form .form-select,.document-form .btn{border-radius:12px}

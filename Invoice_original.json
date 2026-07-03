@@ -1,5 +1,5 @@
 {
-  "type": "invoice",
+  "type": "quote",
   "customer": {
     "name": "Prof. Dr. Suresh Kumar Rayala",
     "company": "Indian Institute of Technology Madras",
@@ -13,9 +13,9 @@
     "vat_number": "33AAAA13615G1Z6"
   },
   "meta": {
-    "number": "INV-2026-0703",
+    "number": "Q-2026-0703",
     "issue_date": "2026-07-03",
-    "due_date": "2026-07-03",
+    "valid_until": "2026-08-02",
     "reference": "",
     "payment_method": "Bank Transfer (Wire)",
     "payment_terms": "100% Advance Payment",
@@ -28,7 +28,7 @@
   "items": [
     {
       "reference": "K0307-01",
-      "description": "PRECICE dCK Phosphorylation Assay Kit",
+      "description": "PRECICE dCK Phosphorylation Assay Kit (1 plate, 96 assays)",
       "product_unit": "(1 plate, 96 assays)",
       "quantity": 1,
       "unit": "pcs",
@@ -47,11 +47,11 @@
     }
   ],
   "notes": {
-    "public": "Kits are in stock. Goods will be dispatched within 2 business days after receipt of 100% advance payment.",
+    "public": "Kits are in stock. Delivery within 2 business days after receipt of 100% advance payment. Quotation in INR as requested.",
     "internal": "Client requires Land Border form and bank details."
   },
   "acceptance": {
-    "enabled": false,
+    "enabled": true,
     "text": "Quote received before execution, read and approved, agreed."
   }
 }

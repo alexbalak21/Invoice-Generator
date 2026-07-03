@@ -104,6 +104,7 @@ function normalize_item_rows(array $items, $defaultVatRate = 0)
         $normalized[] = [
             'reference' => sanitize_input($item['reference'] ?? ''),
             'description' => sanitize_input($item['description'] ?? ''),
+            'product_unit' => sanitize_input($item['product_unit'] ?? ''),
             'quantity' => normalize_number($item['quantity'] ?? 0),
             'unit' => sanitize_input($item['unit'] ?? ''),
             'unit_price' => normalize_number($item['unit_price'] ?? 0),

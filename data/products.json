@@ -2,7 +2,7 @@
   {
     "ID": 1,
     "reference": "K0709-04-2",
-    "title": "PRECICE® PRPP-S Assay Kit",
+    "name": "PRECICE® PRPP-S Assay Kit",
     "size": "10 mL of reaction mixture (half 96-well plate)",
     "price": 515,
     "page_url": "convenient-assay-kits/prpp-s-assay-kit",
@@ -11,7 +11,7 @@
   {
     "ID": 2,
     "reference": "K0709-01-2",
-    "title": "PRECICE® HPRT Assay Kit",
+    "name": "PRECICE® HPRT Assay Kit",
     "size": "10 mL, 24 analyses (8 samples in triplicate)",
     "price": 420,
     "page_url": "convenient-assay-kits/hprt-assay-kit",
@@ -20,7 +20,7 @@
   {
     "ID": 4,
     "reference": "K0709-05-2",
-    "title": "AMP Deaminase Assay Kit",
+    "name": "AMP Deaminase Assay Kit",
     "size": "24 analyses (10 ml reaction buffer)",
     "price": 510,
     "page_url": "convenient-assay-kits/ampda-assay-kit",
@@ -29,7 +29,7 @@
   {
     "ID": 6,
     "reference": "K0709-06-2",
-    "title": "ITP-ase Assay Kit",
+    "name": "ITP-ase Assay Kit",
     "size": "10 mL of reaction mixture (half 96-well plate)",
     "price": 440,
     "page_url": "convenient-assay-kits/itp-ase-assay-kit",
@@ -38,7 +38,7 @@
   {
     "ID": 7,
     "reference": "K0507-02",
-    "title": "ADK Phosphorylation Assay Kit",
+    "name": "ADK Phosphorylation Assay Kit",
     "size": "1 plate (96 assays)",
     "price": 530,
     "page_url": "convenient-assay-kits/adk-phosphorylation-assay-kit",
@@ -47,7 +47,7 @@
   {
     "ID": 8,
     "reference": "K0307-01",
-    "title": "dCK Phosphorylation Assay Kit",
+    "name": "dCK Phosphorylation Assay Kit",
     "size": "1 plate (96 assays)",
     "price": 530,
     "page_url": "convenient-assay-kits/dck-phosphorylation-assay-kit",
@@ -56,7 +56,7 @@
   {
     "ID": 9,
     "reference": "K0507-01.01",
-    "title": "Adk Assay Kit",
+    "name": "Adk Assay Kit",
     "size": "1 plate (96 assays)",
     "price": 530,
     "page_url": "convenient-assay-kits/adk-assay-kit",
@@ -65,7 +65,7 @@
   {
     "ID": 11,
     "reference": "E-Nov8 25",
-    "title": "FMN-Reductase",
+    "name": "FMN-Reductase",
     "size": "25 Units",
     "price": 440,
     "page_url": "active-purified-enzymes/fmn-reductase",
@@ -74,7 +74,7 @@
   {
     "ID": 12,
     "reference": "E-Nov8 50",
-    "title": "FMN-Reductase",
+    "name": "FMN-Reductase",
     "size": "50 Units",
     "price": 705,
     "page_url": "active-purified-enzymes/fmn-reductase",
@@ -83,7 +83,7 @@
   {
     "ID": 13,
     "reference": "E-Nov8 100",
-    "title": "FMN-Reductase",
+    "name": "FMN-Reductase",
     "size": "100 Units",
     "price": 825,
     "page_url": "active-purified-enzymes/fmn-reductase",
@@ -92,7 +92,7 @@
   {
     "ID": 14,
     "reference": "K0700-003-12",
-    "title": "For 12 samples (microplate reader)",
+    "name": "For 12 samples (microplate reader)",
     "size": "12 samples",
     "price": 420,
     "page_url": "dietary-nucleotides-assay-kits/fish-freshness-assay-kit",
@@ -101,7 +101,7 @@
   {
     "ID": 15,
     "reference": "E-Nov5-100",
-    "title": "Human Adenosine Kinase",
+    "name": "Human Adenosine Kinase",
     "size": "100 mUnits",
     "price": 355,
     "page_url": "active-purified-enzymes/recombinant-adenosine-kinase",
@@ -110,7 +110,7 @@
   {
     "ID": 16,
     "reference": "E-Nov5-200",
-    "title": "Human Adenosine Kinase",
+    "name": "Human Adenosine Kinase",
     "size": "200 mUnits",
     "price": 625,
     "page_url": "convenient-assay-kits/adk-phosphorylation-assay-kit",
@@ -119,7 +119,7 @@
   {
     "ID": 19,
     "reference": "E-Nov3-500",
-    "title": "Human Deoxycytidine Kinase",
+    "name": "Human Deoxycytidine Kinase",
     "size": "500 mUnits",
     "price": 295,
     "page_url": "active-purified-enzymes/recombinant-deoxycytidine-kinase",
@@ -128,7 +128,7 @@
   {
     "ID": 20,
     "reference": "E-Nov3-2000",
-    "title": "Human Deoxycytidine Kinase",
+    "name": "Human Deoxycytidine Kinase",
     "size": "2 Units",
     "price": 945,
     "page_url": "active-purified-enzymes/recombinant-deoxycytidine-kinase",
@@ -137,7 +137,7 @@
   {
     "ID": 24,
     "reference": "S1200-04",
-    "title": "HPLC-UV analysis for full spectra of cellular nucleotides (bases, nucleosides, NMP, NDP and NTP) in cell extracts.",
+    "name": "HPLC-UV analysis for full spectra of cellular nucleotides (bases, nucleosides, NMP, NDP and NTP) in cell extracts.",
     "size": "",
     "price": 350,
     "page_url": "/analytical-services/cellular-nucleotides-analysis",
@@ -146,7 +146,7 @@
   {
     "ID": 30,
     "reference": "E-Nov6-50",
-    "title": "Human cytosolic 5'-nucleotidase II",
+    "name": "Human cytosolic 5'-nucleotidase II",
     "size": "50 mUnits",
     "price": 350,
     "page_url": "active-purified-enzymes/cn-ii",
@@ -155,7 +155,7 @@
   {
     "ID": 31,
     "reference": "E-Nov6-100",
-    "title": "Human cytosolic 5'-nucleotidase II",
+    "name": "Human cytosolic 5'-nucleotidase II",
     "size": "100 mUnits",
     "price": 560,
     "page_url": "active-purified-enzymes/cn-ii",
@@ -164,7 +164,7 @@
   {
     "ID": 32,
     "reference": "0700-06-12",
-    "title": "PRECICE® Fishmeal IMP Assay Kit",
+    "name": "PRECICE® Fishmeal IMP Assay Kit",
     "size": "(microplate reader, for 12 samples) including calibration curve with IMP",
     "price": 190,
     "page_url": "freshness-assay-kits/fishmeal-imp-assay-kit",
@@ -173,7 +173,7 @@
   {
     "ID": 33,
     "reference": "0700-06-10",
-    "title": "PRECICE® Fishmeal IMP Assay Kit",
+    "name": "PRECICE® Fishmeal IMP Assay Kit",
     "size": "(spectrophotometer, for 10 samples)",
     "price": 250,
     "page_url": "freshness-assay-kits/fishmeal-imp-assay-kit",
@@ -182,7 +182,7 @@
   {
     "ID": 38,
     "reference": "E-Nov1-100",
-    "title": "Human IMPDH Type 2",
+    "name": "Human IMPDH Type 2",
     "size": "100mU",
     "price": 295,
     "page_url": "active-purified-enzymes/human-recombinant-impdh",
@@ -191,7 +191,7 @@
   {
     "ID": 39,
     "reference": "E-Nov1-250",
-    "title": "Human IMPDH Type 2",
+    "name": "Human IMPDH Type 2",
     "size": "250mU",
     "price": 550,
     "page_url": "active-purified-enzymes/human-recombinant-impdh",
@@ -200,7 +200,7 @@
   {
     "ID": 40,
     "reference": "Screening E-Nov1",
-    "title": "Human Recombinant IMPDH2 Screening Service",
+    "name": "Human Recombinant IMPDH2 Screening Service",
     "size": "IC50 determination for new compounds, performed in duplicate, with mycophenolic acid as the positive control.",
     "price": 590,
     "page_url": "active-purified-enzymes/human-recombinant-impdh",

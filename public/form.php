@@ -20,10 +20,7 @@ $defaultItems = $state['items'] ?? [
 	[
 		'reference' => '',
 		'description' => '',
-		'quantity' => 1,
-		'unit' => 'pcs',
-		'unit_price' => '',
-		'vat_rate' => $company['default_vat_rate'] ?? 0,
+		'product_unit' => '',
 	],
 ];
 
@@ -72,11 +69,15 @@ $notes = $state['notes'] ?? [
 	'internal' => '',
 ];
 
+$terms = $state['terms'] ?? ($company['terms'] ?? '');
+
 // The company always bills in its own accounting currency, no matter what currency
 // a customer's PO or an imported JSON file happens to use — so this is never taken
 // from $meta / imported data, only from the company config.
 $currency = $company['default_currency'] ?? 'EUR';
 $currencySymbol = $company['default_currency_symbol'] ?? '€';
+$companyCurrency = $currency; // accounting base currency (never changes)
+$currencies = require __DIR__ . '/../config/currencies.php';
 $defaultVatRate = (float) ($company['default_vat_rate'] ?? 0);
 $totals = calculate_totals($defaultItems, $defaultVatRate);
 ?>
@@ -99,6 +100,7 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 		</div>
 		<div class="d-flex flex-wrap gap-2">
 			<a class="btn btn-outline-secondary" href="<?= h($type) ?>.json" download>Download sample JSON</a>
+			<button type="button" class="btn btn-outline-secondary" id="jsonSaveButton">Save JSON</button>
 			<button type="button" class="btn btn-outline-primary" id="jsonImportButton">Upload JSON</button>
 			<a class="btn btn-outline-secondary" href="index.php">Back to dashboard</a>
 		</div>
@@ -198,13 +200,29 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 								<input class="form-control" type="text" name="meta[payment_method]" value="<?= h($meta['payment_method'] ?? '') ?>">
 							</div>
 							<div class="col-md-4">
-								<label class="form-label">Currency</label>
-								<input class="form-control" type="text" name="meta[currency]" value="<?= h($currency) ?>" readonly>
-								<div class="form-text">Locked to the company currency — amounts are always billed in <?= h($currency) ?>, even if an imported JSON specifies another currency.</div>
+								<label class="form-label">Invoice currency</label>
+								<select class="form-select" name="meta[currency]" id="currencySelect">
+								<?php foreach ($currencies as $code => $cur): ?>
+									<option value="<?= h($code) ?>"
+										data-symbol="<?= h($cur['symbol']) ?>"
+										<?= ($meta['currency'] ?? $currency) === $code ? 'selected' : '' ?>>
+										<?= h($code) ?> — <?= h($cur['name']) ?>
+									</option>
+								<?php endforeach; ?>
+								</select>
+								<input type="hidden" name="meta[currency_symbol]" id="currencySymbolHidden" value="<?= h($meta['currency_symbol'] ?? $currencySymbol) ?>">
+								<div class="form-text">Base company currency: <?= h($companyCurrency) ?>.</div>
 							</div>
-							<div class="col-md-4">
-								<label class="form-label">Currency symbol</label>
-								<input class="form-control" type="text" name="meta[currency_symbol]" value="<?= h($currencySymbol) ?>" readonly>
+							<div class="col-md-4" id="fxRateBlock" style="<?= ($meta['currency'] ?? $currency) === $companyCurrency ? 'display:none' : '' ?>">
+								<label class="form-label">
+									Conversion rate
+									<span class="text-muted small" id="fxRateLabel">(1 <?= h($companyCurrency) ?> = ? <span id="fxRateCurrencyLabel"><?= h($meta['currency'] ?? $currency) ?></span>)</span>
+								</label>
+								<input class="form-control" type="number" step="0.000001" min="0.000001"
+									name="meta[fx_rate]" id="fxRateInput"
+									value="<?= h($meta['fx_rate'] ?? '') ?>"
+									placeholder="e.g. 1.08">
+								<div class="form-text">Used to show the <?= h($companyCurrency) ?> equivalent on the document.</div>
 							</div>
 							<div class="col-md-4">
 								<label class="form-label">Payment terms</label>
@@ -240,8 +258,9 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 								<thead>
 									<tr>
 										<th>Reference</th>
-										<th>Description</th>
-										<th class="text-end">Qty</th>
+										<th>Name</th>
+										<th>Product unit</th>
+															<th class="text-end">Qty</th>
 										<th>Unit</th>
 										<th class="text-end">Discount</th>
 										<th class="text-end">Unit price</th>
@@ -254,6 +273,8 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 										<tr data-item-row>
 											<td><input class="form-control form-control-sm" type="text" name="items[<?= h($index) ?>][reference]" value="<?= h($item['reference'] ?? '') ?>"></td>
 											<td><input class="form-control form-control-sm" type="text" name="items[<?= h($index) ?>][description]" value="<?= h($item['description'] ?? '') ?>" required></td>
+									<td><input class="form-control form-control-sm" type="text" name="items[<?= h($index) ?>][product_unit]" value="<?= h($item['product_unit'] ?? '') ?>" data-field="product_unit"></td>
+					
 											<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[<?= h($index) ?>][quantity]" value="<?= h($item['quantity'] ?? 1) ?>" data-field="quantity"></td>
 											<td><input class="form-control form-control-sm" type="text" name="items[<?= h($index) ?>][unit]" value="<?= h($item['unit'] ?? '') ?>" data-field="unit"></td>
 											<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[<?= h($index) ?>][discount]" value="<?= h($item['discount'] ?? 0) ?>" data-field="discount"></td>
@@ -270,6 +291,8 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 							<tr data-item-row>
 								<td><input class="form-control form-control-sm" type="text" name="items[__INDEX__][reference]"></td>
 								<td><input class="form-control form-control-sm" type="text" name="items[__INDEX__][description]" required></td>
+								<td><input class="form-control form-control-sm" type="text" name="items[__INDEX__][product_unit]" value="" data-field="product_unit"></td>
+					
 								<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[__INDEX__][quantity]" value="1" data-field="quantity"></td>
 								<td><input class="form-control form-control-sm" type="text" name="items[__INDEX__][unit]" value="" data-field="unit"></td>
 								<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[__INDEX__][discount]" value="0" data-field="discount"></td>
@@ -292,6 +315,10 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 							<div class="col-12">
 								<label class="form-label">Internal notes</label>
 								<textarea class="form-control" rows="3" name="notes[internal]"><?= h($notes['internal'] ?? '') ?></textarea>
+							</div>
+							<div class="col-12">
+								<label class="form-label">Terms &amp; Conditions</label>
+								<textarea class="form-control" rows="4" name="terms"><?= h($terms) ?></textarea>
 							</div>
 							<div class="col-12">
 								<label class="form-check-label">
@@ -395,7 +422,133 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	}
 
-	// Import form data from JSON
+	const jsonSaveButton = document.getElementById('jsonSaveButton');
+	if (jsonSaveButton) {
+		jsonSaveButton.addEventListener('click', function() {
+			const data = gatherFormJson();
+			const validation = validateFormJson(data);
+			if (!validation.valid) {
+				alert('Cannot save JSON:\n' + validation.errors.join('\n'));
+				return;
+			}
+
+			try {
+				const json = JSON.stringify(data, null, 2);
+				JSON.parse(json);
+				downloadJson(json, data.type + '.json');
+			} catch (error) {
+				alert('JSON generation failed: ' + error.message);
+			}
+		});
+	}
+
+	function gatherFormJson() {
+		const form = document.getElementById('documentForm');
+		const type = form.querySelector('input[name="type"]').value || 'invoice';
+
+		const customerFields = ['name', 'company', 'department', 'street', 'city', 'zip', 'country', 'phone', 'email', 'vat_number'];
+		const customer = {};
+		customerFields.forEach(key => {
+			const input = form.querySelector(`input[name="customer[${key}]"]`);
+			customer[key] = input ? input.value.trim() : '';
+		});
+
+		const metaFields = ['number', 'issue_date', 'due_date', 'valid_until', 'reference', 'payment_method', 'payment_terms', 'currency', 'currency_symbol', 'vat_mention', 'fx_rate'];
+		const meta = {};
+		metaFields.forEach(key => {
+			const input = form.querySelector(`[name="meta[${key}]"]`);
+			meta[key] = input ? input.value.trim() : '';
+		});
+
+		const notes = {
+			public: (form.querySelector('textarea[name="notes[public]"]') || {}).value || '',
+			internal: (form.querySelector('textarea[name="notes[internal]"]') || {}).value || '',
+		};
+
+		const terms = (form.querySelector('textarea[name="terms"]') || {}).value || '';
+
+		const acceptance = {
+			enabled: Boolean(form.querySelector('input[name="acceptance[enabled]"]')?.checked),
+			text: (form.querySelector('textarea[name="acceptance[text]"]') || {}).value || '',
+		};
+
+		const items = [];
+		document.querySelectorAll('[data-item-row]').forEach(row => {
+			const item = {
+				reference: (row.querySelector('input[name*="reference"]') || {}).value.trim(),
+				description: (row.querySelector('input[name*="description"]') || {}).value.trim(),
+									product_unit: (row.querySelector('input[name*="product_unit"]') || {}).value.trim(),
+								quantity: parseFloat((row.querySelector('input[name*="quantity"]') || {}).value) || 0,
+				unit: (row.querySelector('input[name*="unit"]') || {}).value.trim(),
+				unit_price: parseFloat((row.querySelector('input[name*="unit_price"]') || {}).value) || 0,
+				discount: parseFloat((row.querySelector('input[name*="discount"]') || {}).value) || 0,
+				vat_rate: parseFloat((row.querySelector('input[name*="vat_rate"]') || {}).value) || 0,
+			};
+			if (item.reference || item.description || item.product_unit || item.quantity || item.unit || item.unit_price || item.discount || item.vat_rate) {
+				items.push(item);
+			}
+		});
+
+
+		return {
+			type,
+			customer,
+			meta,
+			items,
+			notes,
+			acceptance,
+			terms,
+		};
+	}
+
+	function validateFormJson(data) {
+		const errors = [];
+		if (![ 'invoice', 'quote' ].includes(data.type)) {
+			errors.push('Type must be invoice or quote.');
+		}
+		if (!data.customer.name) {
+			errors.push('Customer name is required.');
+		}
+		if (!data.customer.street) {
+			errors.push('Customer street is required.');
+		}
+		if (!data.meta.number) {
+			errors.push('Document number is required.');
+		}
+		if (!data.meta.issue_date) {
+			errors.push('Issue date is required.');
+		}
+		if (data.type === 'invoice' && !data.meta.due_date) {
+			errors.push('Due date is required for invoices.');
+		}
+		if (data.type === 'quote' && !data.meta.valid_until) {
+			errors.push('Valid until is required for quotes.');
+		}
+		if (!Array.isArray(data.items) || data.items.length === 0) {
+			errors.push('At least one item is required.');
+		} else {
+			data.items.forEach((item, index) => {
+				if (!item.description) {
+					errors.push('Item ' + (index + 1) + ': description is required.');
+				}
+			});
+		}
+
+		return { valid: errors.length === 0, errors };
+	}
+
+	function downloadJson(content, filename) {
+		const blob = new Blob([content], { type: 'application/json' });
+		const url = URL.createObjectURL(blob);
+		const anchor = document.createElement('a');
+		anchor.href = url;
+		anchor.download = filename;
+		document.body.appendChild(anchor);
+		anchor.click();
+		anchor.remove();
+		URL.revokeObjectURL(url);
+	}
+
 	function importFormData(data) {
 		// Import customer data
 		if (data.customer) {
@@ -437,6 +590,12 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		}
 
+		// Import terms
+		if (data.terms) {
+			const termsField = document.querySelector('textarea[name="terms"]');
+			if (termsField) termsField.value = data.terms;
+		}
+
 		// Import acceptance data
 		if (data.acceptance) {
 			const acceptanceCheckbox = document.querySelector('input[name="acceptance[enabled]"]');
@@ -471,6 +630,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		// Fill in values
 		if (item.reference) row.querySelector('input[name*="reference"]').value = item.reference;
 		if (item.description) row.querySelector('input[name*="description"]').value = item.description;
+		if (item.product_unit) row.querySelector('input[name*="product_unit"]').value = item.product_unit;
 		if (item.quantity) row.querySelector('input[name*="quantity"]').value = item.quantity;
 		if (item.unit) row.querySelector('input[name*="unit"]').value = item.unit;
 		if (item.discount) row.querySelector('input[name*="discount"]').value = item.discount;
@@ -493,7 +653,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	function updateFormTotals() {
 		const form = document.getElementById('documentForm');
 		const defaultVat = parseFloat(form.dataset.defaultVat) || 0;
-		const currencySymbol = form.dataset.currencySymbol || '€';
+		const symbolInput = document.getElementById('currencySymbolHidden');
+		const currencySymbol = (symbolInput && symbolInput.value) ? symbolInput.value : (form.dataset.currencySymbol || '€');
 		
 		const items = [];
 		document.querySelectorAll('[data-item-row]').forEach(row => {
@@ -583,5 +744,35 @@ document.addEventListener('DOMContentLoaded', function() {
 	</div>
 </div>
 
+
+<script>
+(function () {
+	const select      = document.getElementById('currencySelect');
+	const symbolInput = document.getElementById('currencySymbolHidden');
+	const fxBlock     = document.getElementById('fxRateBlock');
+	const fxLabel     = document.getElementById('fxRateCurrencyLabel');
+	const baseCurrency = <?= json_encode($companyCurrency) ?>;
+
+	if (!select) return;
+
+	function onCurrencyChange() {
+		const opt    = select.options[select.selectedIndex];
+		const code   = opt.value;
+		const symbol = opt.dataset.symbol || code;
+		symbolInput.value = symbol;
+		if (fxLabel) fxLabel.textContent = code;
+
+		const isForeign = code !== baseCurrency;
+		if (fxBlock) fxBlock.style.display = isForeign ? '' : 'none';
+
+		// Update the live preview symbol
+		if (window._setCurrencySymbol) window._setCurrencySymbol(symbol);
+		// Also trigger a totals refresh so the symbol updates live
+		if (typeof updateFormTotals === 'function') updateFormTotals();
+	}
+
+	select.addEventListener('change', onCurrencyChange);
+})();
+</script>
 </body>
 </html>

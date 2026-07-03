@@ -32,11 +32,22 @@ class DocumentBuilder
             $meta['valid_until'] = add_days_to_date($meta['issue_date'], (int) ($company['default_quote_valid_days'] ?? 30));
         }
 
-        // The company always invoices/quotes in its own accounting currency (EUR),
-        // regardless of what currency a customer's PO / imported JSON is denominated in.
-        // Amounts are entered as-is and simply labelled with the company currency below.
-        $meta['currency'] = $defaultCurrency;
-        $meta['currency_symbol'] = $defaultCurrencySymbol;
+        // Allow foreign currencies (e.g. USD) with an explicit conversion rate.
+        // If no foreign currency is selected, fall back to the company default.
+        $selectedCurrency = sanitize_input($meta['currency'] ?? $defaultCurrency);
+        $selectedSymbol   = sanitize_input($meta['currency_symbol'] ?? $defaultCurrencySymbol);
+        if (empty($selectedCurrency)) { $selectedCurrency = $defaultCurrency; }
+        if (empty($selectedSymbol))   { $selectedSymbol   = $defaultCurrencySymbol; }
+        $meta['currency']        = $selectedCurrency;
+        $meta['currency_symbol'] = $selectedSymbol;
+
+        // FX rate: how many foreign-currency units equal 1 base-currency unit.
+        // Only meaningful when currency !== company default currency.
+        $fxRate = ($selectedCurrency !== $defaultCurrency)
+            ? max(0.000001, normalize_number($meta['fx_rate'] ?? 0))
+            : 1.0;
+        $meta['fx_rate'] = $fxRate;
+        $meta['fx_base_currency'] = $defaultCurrency;
         $meta['payment_method'] = $meta['payment_method'] ?: ($company['default_payment_method'] ?? 'Bank Transfer');
 
         $totals = DocumentCalculator::calculateTotals($items, $defaultVatRate);
@@ -56,6 +67,8 @@ class DocumentBuilder
                 'payment_terms' => sanitize_input($meta['payment_terms'] ?? ''),
                 'currency' => sanitize_input($meta['currency'] ?? $defaultCurrency),
                 'currency_symbol' => sanitize_input($meta['currency_symbol'] ?? $defaultCurrencySymbol),
+                'fx_rate' => $fxRate,
+                'fx_base_currency' => $defaultCurrency,
                 'vat_mention' => sanitize_input($meta['vat_mention'] ?? ($company['vat_mention'] ?? '')),
             ],
             'payment' => [
@@ -94,6 +107,7 @@ class DocumentBuilder
             $normalized[] = [
                 'reference' => sanitize_input($item['reference'] ?? ''),
                 'description' => sanitize_input($item['description'] ?? ''),
+                'product_unit' => sanitize_input($item['product_unit'] ?? ''),
                 'quantity' => normalize_number($item['quantity'] ?? 0),
                 'unit' => sanitize_input($item['unit'] ?? ''),
                 'unit_price' => normalize_number($item['unit_price'] ?? 0),

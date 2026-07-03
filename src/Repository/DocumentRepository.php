@@ -47,6 +47,16 @@ class DocumentRepository
         $totalTtc  = (float) ($totals['grand_total'] ?? 0);
         $currency  = $meta['currency'] ?? 'EUR';
 
+        // Always store totals in the base accounting currency (EUR) for consistent
+        // history reporting. If the document is in a foreign currency, convert back.
+        $fxRate       = max(0.000001, (float) ($meta['fx_rate'] ?? 1));
+        $baseCurrency = $meta['fx_base_currency'] ?? 'EUR';
+        if ($currency !== $baseCurrency && $fxRate > 0 && $fxRate !== 1.0) {
+            $totalHt  = round($totalHt  / $fxRate, 2);
+            $totalVat = round($totalVat / $fxRate, 2);
+            $totalTtc = round($totalTtc / $fxRate, 2);
+        }
+
         try {
             $sql = "
                 INSERT INTO `{$table}`

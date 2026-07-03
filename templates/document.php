@@ -11,9 +11,14 @@ $legal = $document["legal"] ?? [];
 $notes = $document["notes"] ?? [];
 $totals = $document["totals"] ?? [];
 $acceptance = $document["acceptance"] ?? [];
+$bank = require __DIR__ . '/../config/bank.php';
+$terms = $document["terms"] ?? ($company["terms"] ?? "");
 
-$currencySymbol = $metadata["currency_symbol"] ?? ($document["currency_symbol"] ?? "€");
-$currencyCode = $metadata["currency"] ?? ($document["currency"] ?? "EUR");
+$currencySymbol  = $metadata["currency_symbol"]  ?? ($document["currency_symbol"]  ?? "€");
+$currencyCode    = $metadata["currency"]         ?? ($document["currency"]         ?? "EUR");
+$fxRate          = (float) ($metadata["fx_rate"]          ?? 1);
+$fxBaseCurrency  = $metadata["fx_base_currency"]  ?? "EUR";
+$hasFx           = $currencyCode !== $fxBaseCurrency && $fxRate > 0 && $fxRate != 1.0;
 
 if (empty($totals)) {
 	$totals = calculate_totals($items, 0);
@@ -150,7 +155,12 @@ if ($showToolbar): ?>
 		<?php endif; ?>
 		<div class="meta-row">
 			<span class="meta-label">Currency:</span>
-			<span><?= h($currencyCode) ?></span>
+			<span>
+				<?= h($currencyCode) ?>
+				<?php if ($hasFx): ?>
+					<span class="fx-rate-meta">(1&nbsp;<?= h($fxBaseCurrency) ?>&nbsp;=&nbsp;<?= number_format($fxRate, 4) ?>&nbsp;<?= h($currencyCode) ?>)</span>
+				<?php endif; ?>
+			</span>
 		</div>
 	</div>
 
@@ -185,7 +195,8 @@ if ($showToolbar): ?>
 			<tr>
 				<th class="name">NAME</th>
 				<th class="reference">REFERENCE</th>
-				<th class="qty">QTY</th>
+					<th class="product-unit">PRODUCT UNIT</th>
+								<th class="qty">QTY</th>
 				<th class="price">UNIT PRICE</th>
 				<th class="amount">AMOUNT</th>
 			</tr>
@@ -195,6 +206,7 @@ if ($showToolbar): ?>
 			<tr>
 				<td class="name"><?= h($item["description"] ?? "") ?></td>
 				<td class="reference"><?= h($item["reference"] ?? "") ?></td>
+						<td class="product-unit"><?= h($item["product_unit"] ?? "") ?></td>
 				<td class="center"><?= h($item["quantity"] ?? 0) ?><?php if (!empty($item["unit"])): ?> <?= h($item["unit"]) ?><?php endif; ?></td>
 				<td class="right"><?= money($item["unit_price"] ?? 0, $currencySymbol) ?></td>
 				<td class="right"><?= money((($item["quantity"] ?? 0) * ($item["unit_price"] ?? 0)) - ($item["discount"] ?? 0), $currencySymbol) ?></td>
@@ -219,6 +231,17 @@ if ($showToolbar): ?>
 				<td>TOTAL <?= h($currencyCode) ?></td>
 				<td class="right"><?= money($totals["grand_total"] ?? 0, $currencySymbol) ?></td>
 			</tr>
+			<?php if ($hasFx): ?>
+			<tr class="fx-equivalent">
+				<td class="fx-note">
+					Equivalent in <?= h($fxBaseCurrency) ?>
+					<span class="fx-rate-tag">(rate&nbsp;1&nbsp;<?= h($fxBaseCurrency) ?>&nbsp;=&nbsp;<?= number_format($fxRate, 6) ?>&nbsp;<?= h($currencyCode) ?>)</span>
+				</td>
+				<td class="right fx-note">
+					≈&nbsp;<?= h($fxBaseCurrency) ?>&nbsp;<?= number_format(($totals["grand_total"] ?? 0) / $fxRate, 2) ?>
+				</td>
+			</tr>
+			<?php endif; ?>
 		</table>
 	</div>
 
@@ -263,6 +286,44 @@ if ($showToolbar): ?>
 	<?php if (!empty($notes["public"])): ?>
 	<div class="notes-block">
 		<strong>Notes:</strong> <?= h($notes["public"]) ?>
+	</div>
+	<?php endif; ?>
+
+
+	<!-- ========== BANK DETAILS ========== -->
+	<?php if (!empty($bank)): ?>
+	<div class="bank-details">
+		<strong>Bank Details</strong>
+		<table class="bank-info">
+			<tr>
+				<td class="bank-label">Beneficiary:</td>
+				<td><?= h($bank["beneficiary"] ?? "") ?></td>
+			</tr>
+			<tr>
+				<td class="bank-label">Bank name:</td>
+				<td><?= h($bank["bank_name"] ?? "") ?></td>
+			</tr>
+			<tr>
+				<td class="bank-label">Bank address:</td>
+				<td><?= h($bank["bank_address"] ?? "") ?></td>
+			</tr>
+			<tr>
+				<td class="bank-label">IBAN:</td>
+				<td><strong><?= h($bank["iban"] ?? "") ?></strong></td>
+			</tr>
+			<tr>
+				<td class="bank-label">BIC:</td>
+				<td><?= h($bank["bic"] ?? "") ?></td>
+			</tr>
+		</table>
+	</div>
+	<?php endif; ?>
+
+	<!-- ========== TERMS & CONDITIONS ========== -->
+	<?php if (!empty($terms)): ?>
+	<div class="terms-block">
+		<strong>Terms &amp; Conditions</strong>
+		<div class="terms-content"><?= h($terms) ?></div>
 	</div>
 	<?php endif; ?>
 
