@@ -121,6 +121,7 @@ if ($showToolbar): ?>
 
 	</header>
 
+	<div class="content">
 
 	<!-- ========== INVOICE META (dates, PO ref, payment method) ========== -->
 	<div class="meta-grid">
@@ -223,6 +224,8 @@ if ($showToolbar): ?>
 		</table>
 	</div>
 
+	<div class="spacer"></div>
+
 
 	<!-- ========== VAT LEGAL MENTION ========== -->
 	<?php if (!empty($legal["vat_mention"])): ?>
@@ -267,6 +270,8 @@ if ($showToolbar): ?>
 
 
 	<!-- ========== FOOTER ========== -->
+	</div>
+
 	<footer>
 		<div class="thanks">Thank you for your business!</div>
 		<div class="contact">
