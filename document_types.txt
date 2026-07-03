@@ -1,0 +1,6 @@
+Quote → client request
+Order Confirmation → client approval
+Sales Order → internal processing
+Delivery Note → shipping
+Invoice → payment
+Credit Note → adjustments
