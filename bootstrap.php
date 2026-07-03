@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__ . '/helpers.php';
+require_once __DIR__ . '/src/Calculator/DocumentCalculator.php';
+require_once __DIR__ . '/src/Builder/DocumentBuilder.php';
+require_once __DIR__ . '/src/Helpers/helpers.php';
 
 $settings = require __DIR__ . '/config/settings.php';
 

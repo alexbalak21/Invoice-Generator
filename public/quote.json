@@ -1,0 +1,54 @@
+{
+  "type": "quote",
+  "customer": {
+    "name": "Prof. Dr. Suresh Kumar Rayala",
+    "company": "Indian Institute of Technology Madras",
+    "department": "Department of Biotechnology",
+    "street": "Chennai, Tamil Nadu",
+    "city": "Chennai",
+    "zip": "600036",
+    "country": "India",
+    "phone": "",
+    "email": "abiramiseetharaman@gmail.com",
+    "vat_number": "33AAAA13615G1Z6"
+  },
+  "meta": {
+    "number": "Q-2026-0703",
+    "issue_date": "2026-07-03",
+    "valid_until": "2026-08-02",
+    "reference": "",
+    "payment_method": "Bank Transfer (Wire)",
+    "payment_terms": "30 days",
+    "currency": "EUR",
+    "currency_symbol": "€",
+    "vat_mention": "VAT not applicable - export outside the European Union (Article 259 of the French Tax Code)"
+  },
+  "items": [
+    {
+      "reference": "K0307",
+      "description": "PRECICE dCK Phosphorylation Assay Kit",
+      "quantity": 1,
+      "unit": "pcs",
+      "unit_price": 0,
+      "discount": 0,
+      "vat_rate": 0
+    },
+    {
+      "reference": "SHIP",
+      "description": "International Shipping - FedEx (DAP Chennai)",
+      "quantity": 1,
+      "unit": "service",
+      "unit_price": 0,
+      "discount": 0,
+      "vat_rate": 0
+    }
+  ],
+  "notes": {
+    "public": "Kits are in stock. Quote valid for 30 days.",
+    "internal": ""
+  },
+  "acceptance": {
+    "enabled": true,
+    "text": "Quote received before execution, read and approved, agreed."
+  }
+}

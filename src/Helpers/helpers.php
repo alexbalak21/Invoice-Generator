@@ -136,6 +136,3 @@ function build_document_from_post(array $post, array $company, $type)
 
     return $document;
 }
-
-require_once __DIR__ . '/src/Calculator/DocumentCalculator.php';
-require_once __DIR__ . '/src/Builder/DocumentBuilder.php';

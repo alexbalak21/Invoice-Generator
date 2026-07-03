@@ -10,9 +10,9 @@ $company = require __DIR__ . '/../config/company.php';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Document Generator</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
-<body class="app-shell">
+<body class="app-shell dashboard-shell">
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
