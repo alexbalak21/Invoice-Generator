@@ -445,6 +445,15 @@ body.app-shell{
         radial-gradient(circle at top left, rgba(55, 113, 200, 0.16), transparent 32%),
         radial-gradient(circle at top right, rgba(255, 196, 0, 0.12), transparent 28%),
         #f4f7fb;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+body.app-shell > .container{
+    flex:1;
+    display:flex;
+    align-items:center;
 }
 
 .hero-panel{
