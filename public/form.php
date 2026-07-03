@@ -478,8 +478,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				reference: (row.querySelector('input[name*="reference"]') || {}).value.trim(),
 				description: (row.querySelector('input[name*="description"]') || {}).value.trim(),
 									product_unit: (row.querySelector('input[name*="product_unit"]') || {}).value.trim(),
-								quantity: parseFloat((row.querySelector('input[name*="quantity"]') || {}).value) || 0,
-				unit: (row.querySelector('input[name*="unit"]') || {}).value.trim(),
+													quantity: parseFloat((row.querySelector('input[name*="quantity"]') || {}).value) || 0,
+									unit: (row.querySelector('input[name$="[unit]"]') || {}).value.trim(),
 				unit_price: parseFloat((row.querySelector('input[name*="unit_price"]') || {}).value) || 0,
 				discount: parseFloat((row.querySelector('input[name*="discount"]') || {}).value) || 0,
 				vat_rate: parseFloat((row.querySelector('input[name*="vat_rate"]') || {}).value) || 0,
@@ -632,7 +632,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (item.description) row.querySelector('input[name*="description"]').value = item.description;
 		if (item.product_unit) row.querySelector('input[name*="product_unit"]').value = item.product_unit;
 		if (item.quantity) row.querySelector('input[name*="quantity"]').value = item.quantity;
-		if (item.unit) row.querySelector('input[name*="unit"]').value = item.unit;
+		if (item.unit) row.querySelector('input[name$="[unit]"]').value = item.unit;
 		if (item.discount) row.querySelector('input[name*="discount"]').value = item.discount;
 		if (item.unit_price) row.querySelector('input[name*="unit_price"]').value = item.unit_price;
 		if (item.vat_rate !== undefined) row.querySelector('input[name*="vat_rate"]').value = item.vat_rate;

@@ -149,37 +149,55 @@ html, body {
 
 /* ── Line-items table ──────────────────────────────────── */
 
-.items { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 8px; }
+.items { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 8px; 
+    margin-bottom: 8px;
+    table-layout: fixed; 
+}
 
 .items thead th {
     background: var(--table-header);
     border: 1px solid var(--border-dark);
     padding: 3px 4px;
-    font-size: 10px;
+    font-size: 11px;
     text-transform: uppercase;
-    line-height: 1.2;
 }
+
 .items tbody td {
     border-left:  1px solid var(--border);
     border-right: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    padding: 3px 4px;
-    line-height: 1.2;
+    padding: 6px;            /* ← merged correctly */
+    font-size: 12px;         /* ← merged correctly */
 }
-    padding: 6px;
-    font-size: 12px;
-}
-.items tbody tr:last-child td { border-bottom: 1px solid var(--border); }
-.items tbody tr               { height: 26px; }
-.items tbody tr:nth-child(even) { background: #fafafa; }
 
-.name       { width: 42%; text-align: left; }
-.reference  { width: 18%; text-align: left; }
-.qty        { width: 10%; }
-.price      { width: 15%; }
+.items tbody tr:last-child td { 
+    border-bottom: 1px solid var(--border); 
+}
+
+.items tbody td {
+    height: 30px;
+    padding: 0 6px;
+    line-height: 30px !important;   
+    vertical-align: middle;
+}
+
+.items tbody tr:nth-child(even) { 
+    background: #fafafa; 
+}
+
+.reference  { width: 10%; text-align: left; }
+.product-unit { width: 20%; text-align: left; }
+.name       { width: 35%; text-align: left; }
+.qty        { width: 8%; }
+.price      { width: 10%; }
 .amount     { width: 15%; }
 .center     { text-align: center; }
 .right      { text-align: right; }
+
+
 
 /* ── Totals ────────────────────────────────────────────── */
 
