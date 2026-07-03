@@ -65,3 +65,4 @@ $taxRate = 0;   // 0% for exports outside EU; change to 20 for standard French V
 // Late payment penalty rate (French B2B mandatory mention)
 $latePaymentRate = 3 * 1.5;    // 3× ECB refinancing rate (currently ~4.5%) — adjust as needed
 $latePaymentFlatFee = 40;      // €40 fixed recovery fee — mandatory for B2B in France
+
