@@ -144,6 +144,18 @@
 		var fileInput = document.getElementById('jsonImportInput');
 		if (fileInput) fileInput.value = '';
 
+		// Trigger fx rate block visibility after import
+		var currSelect = document.getElementById('currencySelect');
+		var fxBlock    = document.getElementById('fxRateBlock');
+		var fxLabel    = document.getElementById('fxRateCurrencyLabel');
+		var form       = document.getElementById('documentForm');
+		var baseCurrency = form ? (form.dataset.baseCurrency || 'EUR') : 'EUR';
+		if (currSelect && fxBlock) {
+			var code = currSelect.value;
+			if (fxLabel) fxLabel.textContent = code;
+			fxBlock.style.display = (code && code !== baseCurrency) ? '' : 'none';
+		}
+
 		if (window.FormApp.updateFormTotals) window.FormApp.updateFormTotals();
 	}
 

@@ -48,6 +48,8 @@ class DocumentBuilder
             : 1.0;
         $meta['fx_rate'] = $fxRate;
         $meta['fx_base_currency'] = $defaultCurrency;
+
+
         $meta['payment_method'] = $meta['payment_method'] ?: ($company['default_payment_method'] ?? 'Bank Transfer');
 
         $totals = DocumentCalculator::calculateTotals($items, $defaultVatRate);

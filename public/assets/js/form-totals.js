@@ -17,9 +17,11 @@
 		var form = document.getElementById('documentForm');
 		if (!form) return;
 
-		var defaultVat    = parseFloat(form.dataset.defaultVat) || 0;
-		var symbolInput   = document.getElementById('currencySymbolHidden');
-		var currencySymbol = (symbolInput && symbolInput.value) ? symbolInput.value : (form.dataset.currencySymbol || '€');
+		var defaultVat     = parseFloat(form.dataset.defaultVat) || 0;
+		var symbolInput    = document.getElementById('currencySymbolHidden');
+		// Base symbol is always the company base currency symbol (€)
+		// For preview we show base totals in the main lines
+		var currencySymbol = form.dataset.currencySymbol || '€';
 
 		var totalSubtotal = 0;
 		var totalVat      = 0;
@@ -48,6 +50,28 @@
 		if (elSubtotal)   elSubtotal.textContent   = fmt(totalSubtotal);
 		if (elVat)        elVat.textContent         = fmt(totalVat);
 		if (elGrandTotal) elGrandTotal.textContent  = fmt(grandTotal);
+
+		// FX equivalent row (e.g. INR)
+		var fxRateInput = document.getElementById('fxRateInput');
+		var elFxRow     = document.getElementById('previewFxRow');
+		var elFxTotal   = document.getElementById('previewFxTotal');
+		var currSelect  = document.getElementById('currencySelect');
+		var baseCurrency = form.dataset.baseCurrency || 'EUR';
+
+		if (elFxRow && elFxTotal && currSelect) {
+			var selectedCode = currSelect.value;
+			var fxRate = parseFloat(fxRateInput ? fxRateInput.value : 0) || 0;
+			var isForeign = selectedCode && selectedCode !== baseCurrency;
+
+			if (isForeign && fxRate > 0) {
+				var opt = currSelect.options[currSelect.selectedIndex];
+				var fxSymbol = (opt && opt.dataset.symbol) ? opt.dataset.symbol : selectedCode;
+				elFxTotal.textContent = fxSymbol + ' ' + (grandTotal * fxRate).toFixed(2).replace('.', ',');
+				elFxRow.style.display = '';
+			} else {
+				elFxRow.style.display = 'none';
+			}
+		}
 	}
 
 	document.addEventListener('DOMContentLoaded', function () {
@@ -69,12 +93,17 @@
 				if (row) window.FormApp.syncRowHiddenInputs(row);
 			}
 		});
+
+		// Also update when fx_rate input changes
+		var fxRateInput = document.getElementById('fxRateInput');
+		if (fxRateInput) {
+			fxRateInput.addEventListener('input', updateFormTotals);
+		}
 	});
 
-	window.FormApp.updateFormTotals    = updateFormTotals;
-	window.FormApp._setCurrencySymbol  = function (symbol) {
-		var symbolInput = document.getElementById('currencySymbolHidden');
-		if (symbolInput) symbolInput.value = symbol;
+	window.FormApp.updateFormTotals   = updateFormTotals;
+	window.FormApp._setCurrencySymbol = function (symbol) {
+		// When currency changes, base symbol stays; just recalculate
 		updateFormTotals();
 	};
 }());

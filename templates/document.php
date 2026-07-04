@@ -21,6 +21,8 @@ $fxRate         = (float) ($metadata['fx_rate'] ?? 1);
 $fxBaseCurrency = $metadata['fx_base_currency'] ?? 'EUR';
 $hasFx          = $currencyCode !== $fxBaseCurrency && $fxRate > 0 && $fxRate != 1.0;
 
+
+
 if (empty($totals)) {
     $totals = calculate_totals($items, 0);
 }

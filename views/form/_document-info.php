@@ -38,7 +38,12 @@
 				<?php endforeach; ?>
 				</select>
 				<input type="hidden" name="meta[currency_symbol]" id="currencySymbolHidden" value="<?= h($meta['currency_symbol'] ?? $currencySymbol) ?>">
-				<div class="form-text">Base company currency: <?= h($companyCurrency) ?>.</div>
+				<div class="form-text">
+					Base prices are always in <?= h($companyCurrency) ?>.
+					<?php if (($meta['currency'] ?? $currency) !== $companyCurrency): ?>
+						Converted to <?= h($meta['currency'] ?? $currency) ?> on the document using the rate below.
+					<?php endif; ?>
+				</div>
 			</div>
 			<div class="col-md-4" id="fxRateBlock" style="<?= ($meta['currency'] ?? $currency) === $companyCurrency ? 'display:none' : '' ?>">
 				<label class="form-label">
@@ -48,8 +53,8 @@
 				<input class="form-control" type="number" step="0.000001" min="0.000001"
 					name="meta[fx_rate]" id="fxRateInput"
 					value="<?= h($meta['fx_rate'] ?? '') ?>"
-					placeholder="e.g. 1.08">
-				<div class="form-text">Used to show the <?= h($companyCurrency) ?> equivalent on the document.</div>
+					placeholder="e.g. 108.89">
+				<div class="form-text">Base <?= h($companyCurrency) ?> prices × this rate = invoice currency amounts.</div>
 			</div>
 			<div class="col-md-4">
 				<label class="form-label">Payment terms</label>

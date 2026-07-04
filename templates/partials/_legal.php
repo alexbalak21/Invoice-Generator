@@ -23,7 +23,17 @@
 				<strong><?= number_format($latePaymentRate, 2) ?>%</strong> per year.
 			<?php endif; ?>
 			<?php if ($latePaymentFee > 0): ?>
-				A fixed recovery fee of <strong><?= h(number_format($latePaymentFee, 2)) ?> <?= h($currencySymbol) ?></strong> may also apply.
+				<?php if ($hasFx): ?>
+					<?php
+						$baseFeeSymbol      = $fxBaseCurrency === 'EUR' ? '€' : h($fxBaseCurrency);
+						$convertedFeeAmount = round($latePaymentFee * $fxRate, 2);
+					?>
+					A fixed recovery fee of
+					<strong><?= h(number_format($latePaymentFee, 2)) ?> <?= $baseFeeSymbol ?></strong>
+					(<?= h($currencySymbol) ?>&nbsp;<?= number_format($convertedFeeAmount, 2) ?>) may also apply.
+				<?php else: ?>
+					A fixed recovery fee of <strong><?= h(number_format($latePaymentFee, 2)) ?> <?= h($currencySymbol) ?></strong> may also apply.
+				<?php endif; ?>
 			<?php endif; ?>
 		<?php endif; ?>
 	</div>

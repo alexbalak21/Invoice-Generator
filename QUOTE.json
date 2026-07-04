@@ -31,7 +31,7 @@
       "description": "PRECICE dCK Phosphorylation Assay Kit (1 plate, 96 assays)",
       "quantity": 1,
       "unit": "pcs",
-      "unit_price": 530.00,
+      "unit_price": 530.0,
       "discount": 0,
       "vat_rate": 0
     },

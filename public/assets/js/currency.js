@@ -1,6 +1,5 @@
 /**
- * currency.js — currency select / FX block toggle
- * Reads window.FormApp.baseCurrency (set inline by the PHP view via a data attribute).
+ * currency.js — invoice currency select / FX block toggle
  */
 (function () {
 	'use strict';
@@ -13,7 +12,6 @@
 
 		if (!select) return;
 
-		// Base (accounting) currency is written into the form element as a data attribute
 		var form         = document.getElementById('documentForm');
 		var baseCurrency = form ? (form.dataset.baseCurrency || 'EUR') : 'EUR';
 
@@ -22,16 +20,16 @@
 			var code   = opt.value;
 			var symbol = opt.dataset.symbol || code;
 
+			// Update the hidden currency_symbol input
 			if (symbolInput) symbolInput.value = symbol;
 			if (fxLabel)     fxLabel.textContent = code;
 
+			// Show/hide FX rate block
 			var isForeign = code !== baseCurrency;
 			if (fxBlock) fxBlock.style.display = isForeign ? '' : 'none';
 
-			// Update live preview symbol and recalculate
-			if (window.FormApp && window.FormApp._setCurrencySymbol) {
-				window.FormApp._setCurrencySymbol(symbol);
-			} else if (window.FormApp && window.FormApp.updateFormTotals) {
+			// Recalculate totals preview (sidebar)
+			if (window.FormApp && window.FormApp.updateFormTotals) {
 				window.FormApp.updateFormTotals();
 			}
 		}

@@ -367,30 +367,55 @@ hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
 /* ==========================================================
    End of document-specific styles
 ========================================================== */
-/* ── FX / conversion rate ───────────────────────────────── */
-.fx-equivalent{
-    display: none;
+/* ── FX / converted currency columns ────────────────────── */
+
+/* Invoice-currency columns (e.g. INR) when base ≠ invoice currency */
+th.fx-col,
+td.fx-col {
+    background: #f8f6ff;
+    color: #4a3d8f;
+    border-left: 2px solid #d0c8f0 !important;
 }
 
-tr.fx-equivalent td {
-    border-top: 1px dashed #bbb;
-    padding-top: 4px;
-}
-.fx-note {
-    font-size: .78rem;
-    color: #555;
-    font-style: italic;
-}
-.fx-rate-tag {
-    margin-left: .4em;
+th.fx-col {
     font-size: .72rem;
-    color: #888;
+    letter-spacing: .03em;
 }
-.fx-rate-meta {
-    font-size: .78rem;
-    color: #777;
-    margin-left: .25em;
-    display: none;
+
+td.fx-col {
+    font-size: .88rem;
+    white-space: nowrap;
+}
+
+/* Base currency total column (subtler) */
+td.base-total {
+    font-size: .82rem;
+    color: #666;
+    border-left: 1px solid #e0e0e0;
+}
+
+tr.grand-total td.base-total {
+    font-size: .88rem;
+    color: #555;
+}
+
+tr.grand-total td.fx-col {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* Rate note row */
+tr.fx-rate-row td {
+    border-top: 1px dashed #c8c0e8;
+    padding-top: 4px;
+    padding-bottom: 2px;
+}
+
+.fx-rate-note {
+    font-size: .72rem;
+    color: #7b6fbf;
+    font-style: italic;
+    text-align: right;
 }
 
 /* ── Bank Details ──────────────────────────────────────── */
