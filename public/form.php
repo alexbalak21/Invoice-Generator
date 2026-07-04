@@ -638,13 +638,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (item.vat_rate !== undefined) row.querySelector('input[name*="vat_rate"]').value = item.vat_rate;
 
 		// Add remove button functionality
-		const removeBtn = row.querySelector('[data-remove-row]');
-		if (removeBtn) {
-			removeBtn.addEventListener('click', function() {
-				this.closest('[data-item-row]').remove();
-				updateFormTotals();
-			});
-		}
+		// (delegation handles this globally — no per-row binding needed)
 
 		document.getElementById('itemsBody').appendChild(row);
 	}
@@ -686,6 +680,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById('previewVat').textContent = formatMoney(totalVat);
 		document.getElementById('previewGrandTotal').textContent = formatMoney(grandTotal);
 	}
+
+	// Delegated remove listener — covers both PHP-rendered and dynamically added rows
+	document.getElementById('itemsBody').addEventListener('click', function(e) {
+		const btn = e.target.closest('[data-remove-row]');
+		if (!btn) return;
+		btn.closest('[data-item-row]').remove();
+		updateFormTotals();
+	});
 
 	// Add item button handler
 	const addItemButton = document.getElementById('addItemButton');
