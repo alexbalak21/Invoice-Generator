@@ -355,6 +355,8 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 </div>
 
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- ===== Product Picker Modal ===== -->
 <div class="modal fade" id="productPickerModal" tabindex="-1" aria-labelledby="productPickerLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -374,7 +376,7 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 							<tr>
 								<th>Reference</th>
 								<th>Name</th>
-								<th>Size / Format</th>
+								<th>Unit</th>
 								<th class="text-end">Unit price</th>
 								<th></th>
 							</tr>
@@ -391,8 +393,6 @@ $totals = calculate_totals($defaultItems, $defaultVatRate);
 		</div>
 	</div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -704,45 +704,110 @@ document.addEventListener('DOMContentLoaded', function() {
 			updateFormTotals();
 		}
 	});
+
+	// ===== Product Picker =====
+	const productPickerModal = new bootstrap.Modal(document.getElementById('productPickerModal'));
+	const productPickerBody  = document.getElementById('productPickerBody');
+	const productPickerStatus = document.getElementById('productPickerStatus');
+	const productSearch      = document.getElementById('productSearch');
+	const addProductButton   = document.getElementById('addProductButton');
+
+	let allProducts = [];
+	let productsLoaded = false;
+
+	function renderProductRows(products) {
+		if (products.length === 0) {
+			productPickerBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No products found.</td></tr>';
+			productPickerStatus.textContent = '';
+			return;
+		}
+		productPickerStatus.textContent = products.length + ' product(s)';
+		productPickerBody.innerHTML = products.map(function(p) {
+			const ref         = (p.reference    || '').replace(/"/g, '&quot;');
+			const name        = (p.name         || '').replace(/</g, '&lt;');
+			const productUnit = (p.product_unit || '').replace(/</g, '&lt;');
+			const price       = parseFloat(p.price) || 0;
+			const pageUrl     = (p.page_url || '').replace(/"/g, '&quot;');
+			const nameCell    = pageUrl
+				? '<a href="' + pageUrl + '" target="_blank" rel="noopener">' + name + '</a>'
+				: name;
+			return '<tr>' +
+				'<td><code>' + (p.reference || '') + '</code></td>' +
+				'<td>' + nameCell + '</td>' +
+				'<td>' + (p.product_unit || '') + '</td>' +
+				'<td class="text-end">' + price.toFixed(2) + '</td>' +
+				'<td class="text-end">' +
+					'<button type="button" class="btn btn-sm btn-primary" ' +
+						'data-ref="' + ref + '" ' +
+						'data-name="' + (p.name || '').replace(/"/g, '&quot;') + '" ' +
+						'data-unit="' + (p.product_unit || '').replace(/"/g, '&quot;') + '" ' +
+						'data-price="' + price + '">' +
+						'Add' +
+					'</button>' +
+				'</td>' +
+			'</tr>';
+		}).join('');
+	}
+
+	function loadProducts(query) {
+		const url = 'api/products.php' + (query ? '?q=' + encodeURIComponent(query) : '');
+		productPickerBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Loading…</td></tr>';
+		productPickerStatus.textContent = '';
+		fetch(url)
+			.then(function(r) {
+				if (!r.ok) throw new Error('HTTP ' + r.status);
+				return r.json();
+			})
+			.then(function(data) {
+				allProducts = data;
+				productsLoaded = true;
+				renderProductRows(data);
+			})
+			.catch(function(err) {
+				productPickerBody.innerHTML = '<tr><td colspan="5" class="text-center text-danger py-4">Could not load catalogue: ' + err.message + '</td></tr>';
+			});
+	}
+
+	if (addProductButton) {
+		addProductButton.addEventListener('click', function() {
+			productPickerModal.show();
+			if (!productsLoaded) {
+				loadProducts('');
+			}
+		});
+	}
+
+	// Search with debounce
+	let searchTimer;
+	if (productSearch) {
+		productSearch.addEventListener('input', function() {
+			clearTimeout(searchTimer);
+			const q = this.value.trim();
+			searchTimer = setTimeout(function() {
+				loadProducts(q);
+			}, 300);
+		});
+	}
+
+	// Add product to items table on click
+	document.getElementById('productPickerBody').addEventListener('click', function(e) {
+		const btn = e.target.closest('button[data-ref]');
+		if (!btn) return;
+
+		const itemsBody = document.getElementById('itemsBody');
+		const newIndex  = itemsBody.children.length;
+		addItemRow({
+			reference:    btn.dataset.ref,
+			description:  btn.dataset.name,
+			product_unit: btn.dataset.unit,
+			quantity:     1,
+			unit_price:   parseFloat(btn.dataset.price) || 0,
+		}, newIndex);
+		updateFormTotals();
+		productPickerModal.hide();
+	});
 });
 </script>
-
-<!-- ===== Product Picker Modal ===== -->
-<div class="modal fade" id="productPickerModal" tabindex="-1" aria-labelledby="productPickerLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg modal-dialog-scrollable">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="productPickerLabel">Add from catalogue</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-			</div>
-			<div class="modal-body">
-				<div class="mb-3">
-					<input type="search" id="productSearch" class="form-control" placeholder="Search by reference or name…" autocomplete="off">
-				</div>
-				<div id="productPickerStatus" class="text-muted small mb-2"></div>
-				<div class="table-responsive">
-					<table class="table table-hover table-sm align-middle" id="productPickerTable">
-						<thead class="table-light">
-							<tr>
-								<th>Reference</th>
-								<th>Name</th>
-								<th>Size / Format</th>
-								<th class="text-end">Unit price</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody id="productPickerBody">
-							<tr><td colspan="5" class="text-center text-muted py-4">Loading…</td></tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
 
 
 <script>
