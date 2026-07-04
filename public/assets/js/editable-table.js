@@ -123,6 +123,14 @@
 	document.addEventListener('DOMContentLoaded', function () {
 		syncAllRows();
 
+		// Ensure hidden inputs are synced before actual form submission
+		var form = document.getElementById('documentForm');
+		if (form) {
+			form.addEventListener('submit', function () {
+				syncAllRows();
+			});
+		}
+
 		document.addEventListener('keydown', function (e) {
 			var cell = e.target.closest('[data-field]');
 			if (!cell) return;

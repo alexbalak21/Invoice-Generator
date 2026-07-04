@@ -112,6 +112,7 @@ html, body {
 }
 .meta-grid .meta-row  { display: flex; gap: 6px; font-size: 13px; }
 .meta-grid .meta-label { font-weight: 600; color: var(--text-light); min-width: 130px; }
+.fx-rate-meta { font-size: 11px; color: var(--text-light)}
 
 /* ── Bill-to block ─────────────────────────────────────── */
 
@@ -188,12 +189,12 @@ html, body {
     background: #fafafa; 
 }
 
-.reference  { width: 10%; text-align: left; }
+.reference  { width: 12%; text-align: left; }
 .product-unit { width: 20%; text-align: left; }
 .name       { width: 35%; text-align: left; }
-.qty        { width: 8%; }
+.qty        { width: 8%; }  
 .price      { width: 10%; }
-.amount     { width: 15%; }
+.amount     { width: 12%; }
 .center     { text-align: center; }
 .right      { text-align: right; }
 
