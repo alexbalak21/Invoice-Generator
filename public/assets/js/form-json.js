@@ -39,14 +39,14 @@
 		var items = [];
 		document.querySelectorAll('[data-item-row]').forEach(function (row) {
 			var item = {
-				reference:    (row.querySelector('input[name*="reference"]')    || {}).value.trim(),
-				description:  (row.querySelector('input[name*="description"]')  || {}).value.trim(),
-				product_unit: (row.querySelector('input[name*="product_unit"]') || {}).value.trim(),
-				quantity:     parseFloat((row.querySelector('input[name*="quantity"]')   || {}).value) || 0,
-				unit:         (row.querySelector('input[name$="[unit]"]')       || {}).value.trim(),
-				unit_price:   parseFloat((row.querySelector('input[name*="unit_price"]') || {}).value) || 0,
-				discount:     parseFloat((row.querySelector('input[name*="discount"]')   || {}).value) || 0,
-				vat_rate:     parseFloat((row.querySelector('input[name*="vat_rate"]')   || {}).value) || 0,
+				reference:    (row.querySelector('[data-field="reference"]')    || {}).textContent.trim(),
+				description:  (row.querySelector('[data-field="description"]')  || {}).textContent.trim(),
+				product_unit: (row.querySelector('[data-field="product_unit"]') || {}).textContent.trim(),
+				quantity:     parseFloat((row.querySelector('[data-field="quantity"]')   || {}).textContent) || 0,
+				unit:         (row.querySelector('[data-field="unit"]')       || {}).textContent.trim(),
+				unit_price:   parseFloat((row.querySelector('[data-field="unit_price"]') || {}).textContent) || 0,
+				discount:     parseFloat((row.querySelector('[data-field="discount"]')   || {}).textContent) || 0,
+				vat_rate:     parseFloat((row.querySelector('[data-field="vat_rate"]')   || {}).textContent) || 0,
 			};
 			// Only include rows that have some data
 			if (item.reference || item.description || item.product_unit || item.quantity || item.unit || item.unit_price || item.discount || item.vat_rate) {

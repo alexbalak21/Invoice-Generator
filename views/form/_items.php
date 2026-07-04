@@ -26,14 +26,14 @@
 				<tbody id="itemsBody" data-items-body>
 					<?php foreach ($defaultItems as $index => $item): ?>
 						<tr data-item-row>
-							<td><input class="form-control form-control-sm" type="text" name="items[<?= h($index) ?>][reference]" value="<?= h($item['reference'] ?? '') ?>"></td>
-							<td><input class="form-control form-control-sm" type="text" name="items[<?= h($index) ?>][description]" value="<?= h($item['description'] ?? '') ?>" required></td>
-							<td><input class="form-control form-control-sm" type="text" name="items[<?= h($index) ?>][product_unit]" value="<?= h($item['product_unit'] ?? '') ?>" data-field="product_unit"></td>
-							<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[<?= h($index) ?>][quantity]" value="<?= h($item['quantity'] ?? 1) ?>" data-field="quantity"></td>
-							<td><input class="form-control form-control-sm" type="text" name="items[<?= h($index) ?>][unit]" value="<?= h($item['unit'] ?? '') ?>" data-field="unit"></td>
-							<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[<?= h($index) ?>][discount]" value="<?= h($item['discount'] ?? 0) ?>" data-field="discount"></td>
-							<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[<?= h($index) ?>][unit_price]" value="<?= h($item['unit_price'] ?? '') ?>" data-field="unit_price"></td>
-							<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[<?= h($index) ?>][vat_rate]" value="<?= h($item['vat_rate'] ?? $defaultVatRate) ?>" data-field="vat_rate"></td>
+							<td><div class="editable-cell" contenteditable="true" data-field="reference"><?= h($item['reference'] ?? '') ?></div><input type="hidden" name="items[<?= h($index) ?>][reference]" data-hidden-field="reference" value="<?= h($item['reference'] ?? '') ?>"></td>
+							<td><div class="editable-cell" contenteditable="true" data-field="description"><?= h($item['description'] ?? '') ?></div><input type="hidden" name="items[<?= h($index) ?>][description]" data-hidden-field="description" value="<?= h($item['description'] ?? '') ?>"></td>
+							<td><div class="editable-cell" contenteditable="true" data-field="product_unit"><?= h($item['product_unit'] ?? '') ?></div><input type="hidden" name="items[<?= h($index) ?>][product_unit]" data-hidden-field="product_unit" value="<?= h($item['product_unit'] ?? '') ?>"></td>
+							<td class="text-end"><div class="editable-cell" contenteditable="true" data-field="quantity"><?= h($item['quantity'] ?? 1) ?></div><input type="hidden" name="items[<?= h($index) ?>][quantity]" data-hidden-field="quantity" value="<?= h($item['quantity'] ?? 1) ?>"></td>
+							<td><div class="editable-cell" contenteditable="true" data-field="unit"><?= h($item['unit'] ?? '') ?></div><input type="hidden" name="items[<?= h($index) ?>][unit]" data-hidden-field="unit" value="<?= h($item['unit'] ?? '') ?>"></td>
+							<td class="text-end"><div class="editable-cell" contenteditable="true" data-field="discount"><?= h($item['discount'] ?? 0) ?></div><input type="hidden" name="items[<?= h($index) ?>][discount]" data-hidden-field="discount" value="<?= h($item['discount'] ?? 0) ?>"></td>
+							<td class="text-end"><div class="editable-cell" contenteditable="true" data-field="unit_price"><?= h($item['unit_price'] ?? '') ?></div><input type="hidden" name="items[<?= h($index) ?>][unit_price]" data-hidden-field="unit_price" value="<?= h($item['unit_price'] ?? '') ?>"></td>
+							<td class="text-end"><div class="editable-cell" contenteditable="true" data-field="vat_rate"><?= h($item['vat_rate'] ?? $defaultVatRate) ?></div><input type="hidden" name="items[<?= h($index) ?>][vat_rate]" data-hidden-field="vat_rate" value="<?= h($item['vat_rate'] ?? $defaultVatRate) ?>"></td>
 							<td class="text-end"><button type="button" class="btn btn-link text-danger p-0" data-remove-row>Remove</button></td>
 						</tr>
 					<?php endforeach; ?>
@@ -43,14 +43,14 @@
 
 		<template id="itemRowTemplate">
 			<tr data-item-row>
-				<td><input class="form-control form-control-sm" type="text" name="items[__INDEX__][reference]"></td>
-				<td><input class="form-control form-control-sm" type="text" name="items[__INDEX__][description]" required></td>
-				<td><input class="form-control form-control-sm" type="text" name="items[__INDEX__][product_unit]" value="" data-field="product_unit"></td>
-				<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[__INDEX__][quantity]" value="1" data-field="quantity"></td>
-				<td><input class="form-control form-control-sm" type="text" name="items[__INDEX__][unit]" value="" data-field="unit"></td>
-				<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[__INDEX__][discount]" value="0" data-field="discount"></td>
-				<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[__INDEX__][unit_price]" value="0" data-field="unit_price"></td>
-				<td><input class="form-control form-control-sm text-end" type="number" min="0" step="0.01" name="items[__INDEX__][vat_rate]" value="<?= h($defaultVatRate) ?>" data-field="vat_rate"></td>
+				<td><div class="editable-cell" contenteditable="true" data-field="reference"></div><input type="hidden" name="items[__INDEX__][reference]" data-hidden-field="reference" value=""></td>
+				<td><div class="editable-cell" contenteditable="true" data-field="description"></div><input type="hidden" name="items[__INDEX__][description]" data-hidden-field="description" value=""></td>
+				<td><div class="editable-cell" contenteditable="true" data-field="product_unit"></div><input type="hidden" name="items[__INDEX__][product_unit]" data-hidden-field="product_unit" value=""></td>
+				<td class="text-end"><div class="editable-cell" contenteditable="true" data-field="quantity">1</div><input type="hidden" name="items[__INDEX__][quantity]" data-hidden-field="quantity" value="1"></td>
+				<td><div class="editable-cell" contenteditable="true" data-field="unit"></div><input type="hidden" name="items[__INDEX__][unit]" data-hidden-field="unit" value=""></td>
+				<td class="text-end"><div class="editable-cell" contenteditable="true" data-field="discount">0</div><input type="hidden" name="items[__INDEX__][discount]" data-hidden-field="discount" value="0"></td>
+				<td class="text-end"><div class="editable-cell" contenteditable="true" data-field="unit_price">0</div><input type="hidden" name="items[__INDEX__][unit_price]" data-hidden-field="unit_price" value="0"></td>
+				<td class="text-end"><div class="editable-cell" contenteditable="true" data-field="vat_rate"><?= h($defaultVatRate) ?></div><input type="hidden" name="items[__INDEX__][vat_rate]" data-hidden-field="vat_rate" value="<?= h($defaultVatRate) ?>"></td>
 				<td class="text-end"><button type="button" class="btn btn-link text-danger p-0" data-remove-row>Remove</button></td>
 			</tr>
 		</template>

@@ -88,6 +88,7 @@ require __DIR__ . '/../../views/layouts/app.php';
 </div>
 
 <script src="assets/js/form-items.js"></script>
+<script src="assets/js/editable-table.js"></script>
 <script src="assets/js/form-totals.js"></script>
 <script src="assets/js/form-json.js"></script>
 <script src="assets/js/product-picker.js"></script>

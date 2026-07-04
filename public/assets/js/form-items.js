@@ -7,6 +7,22 @@
 
 	window.FormApp = window.FormApp || {};
 
+	function setRowFieldValue(row, field, value) {
+		var cell = row.querySelector('[data-field="' + field + '"]');
+		if (!cell) return;
+		cell.textContent = value !== undefined && value !== null ? value : '';
+		var hidden = row.querySelector('input[data-hidden-field="' + field + '"]');
+		if (hidden) hidden.value = cell.textContent.trim();
+	}
+
+	function syncRowHiddenInputs(row) {
+		row.querySelectorAll('[data-field]').forEach(function (cell) {
+			var field = cell.dataset.field;
+			var hidden = row.querySelector('input[data-hidden-field="' + field + '"]');
+			if (hidden) hidden.value = cell.textContent.trim();
+		});
+	}
+
 	/**
 	 * Clone the item row template, populate it with data, and append it to #itemsBody.
 	 * @param {object} item   - Optional field values (reference, description, etc.)
@@ -17,35 +33,24 @@
 		const template = document.getElementById('itemRowTemplate');
 		if (!template) return;
 
-		const row = template.content.cloneNode(true);
+		const fragment = template.content.cloneNode(true);
+		const row = fragment.querySelector('[data-item-row]');
+		if (!row) return;
 
-		// Replace placeholder index in all input names
-		row.querySelectorAll('input').forEach(function (input) {
+		row.querySelectorAll('input[type="hidden"]').forEach(function (input) {
 			input.name = input.name.replace('__INDEX__', index);
 		});
 
-		// Fill values where provided
-		var fields = {
-			'reference':    'reference',
-			'description':  'description',
-			'product_unit': 'product_unit',
-			'quantity':     'quantity',
-			'unit':         '[unit]',   // selector uses $= to avoid matching product_unit
-			'discount':     'discount',
-			'unit_price':   'unit_price',
-			'vat_rate':     'vat_rate',
-		};
+		setRowFieldValue(row, 'reference', item.reference || '');
+		setRowFieldValue(row, 'description', item.description || '');
+		setRowFieldValue(row, 'product_unit', item.product_unit || '');
+		setRowFieldValue(row, 'quantity', item.quantity !== undefined ? item.quantity : 1);
+		setRowFieldValue(row, 'unit', item.unit || '');
+		setRowFieldValue(row, 'discount', item.discount !== undefined ? item.discount : 0);
+		setRowFieldValue(row, 'unit_price', item.unit_price !== undefined ? item.unit_price : 0);
+		setRowFieldValue(row, 'vat_rate', item.vat_rate !== undefined ? item.vat_rate : '');
 
-		if (item.reference    !== undefined) row.querySelector('input[name*="reference"]').value     = item.reference;
-		if (item.description  !== undefined) row.querySelector('input[name*="description"]').value   = item.description;
-		if (item.product_unit !== undefined) row.querySelector('input[name*="product_unit"]').value  = item.product_unit;
-		if (item.quantity     !== undefined) row.querySelector('input[name*="quantity"]').value      = item.quantity;
-		if (item.unit         !== undefined) row.querySelector('input[name$="[unit]"]').value        = item.unit;
-		if (item.discount     !== undefined) row.querySelector('input[name*="discount"]').value      = item.discount;
-		if (item.unit_price   !== undefined) row.querySelector('input[name*="unit_price"]').value    = item.unit_price;
-		if (item.vat_rate     !== undefined) row.querySelector('input[name*="vat_rate"]').value      = item.vat_rate;
-
-		document.getElementById('itemsBody').appendChild(row);
+		document.getElementById('itemsBody').appendChild(fragment);
 	}
 
 	// Delegated remove-row listener (covers both PHP-rendered and dynamic rows)
@@ -71,4 +76,5 @@
 	});
 
 	window.FormApp.addItemRow = addItemRow;
+	window.FormApp.syncRowHiddenInputs = syncRowHiddenInputs;
 }());

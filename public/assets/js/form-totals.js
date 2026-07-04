@@ -8,6 +8,11 @@
 
 	window.FormApp = window.FormApp || {};
 
+	function parseCellNumber(row, field, fallback) {
+		var cell = row.querySelector('[data-field="' + field + '"]');
+		return parseFloat((cell && cell.textContent) || '') || fallback;
+	}
+
 	function updateFormTotals() {
 		var form = document.getElementById('documentForm');
 		if (!form) return;
@@ -20,10 +25,10 @@
 		var totalVat      = 0;
 
 		document.querySelectorAll('[data-item-row]').forEach(function (row) {
-			var quantity  = parseFloat(row.querySelector('input[name*="quantity"]').value)   || 0;
-			var unitPrice = parseFloat(row.querySelector('input[name*="unit_price"]').value) || 0;
-			var discount  = parseFloat(row.querySelector('input[name*="discount"]').value)   || 0;
-			var vatRate   = parseFloat(row.querySelector('input[name*="vat_rate"]').value)   || defaultVat;
+			var quantity  = parseCellNumber(row, 'quantity', 0);
+			var unitPrice = parseCellNumber(row, 'unit_price', 0);
+			var discount  = parseCellNumber(row, 'discount', 0);
+			var vatRate   = parseCellNumber(row, 'vat_rate', defaultVat);
 
 			var subtotal = (quantity * unitPrice) - discount;
 			totalSubtotal += subtotal;
@@ -46,10 +51,22 @@
 	}
 
 	document.addEventListener('DOMContentLoaded', function () {
-		// Re-calculate whenever any item field changes
-		document.addEventListener('change', function (e) {
-			if (e.target.closest('[data-item-row]') && e.target.dataset.field) {
-				updateFormTotals();
+		document.addEventListener('input', function (e) {
+			var target = e.target.closest('[data-field]');
+			if (!target) return;
+			if (window.FormApp.syncRowHiddenInputs) {
+				var row = target.closest('[data-item-row]');
+				if (row) window.FormApp.syncRowHiddenInputs(row);
+			}
+			updateFormTotals();
+		});
+
+		document.addEventListener('focusout', function (e) {
+			var target = e.target.closest('[data-field]');
+			if (!target) return;
+			if (window.FormApp.syncRowHiddenInputs) {
+				var row = target.closest('[data-item-row]');
+				if (row) window.FormApp.syncRowHiddenInputs(row);
 			}
 		});
 	});

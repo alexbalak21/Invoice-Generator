@@ -205,3 +205,31 @@ body.dashboard-shell > .container{
 
 /* Small helpers used by the app */
 .document-form .card{border-radius:20px}
+
+.items-editor td {
+    padding: 0;
+}
+
+.items-editor .editable-cell {
+    min-width: 90px;
+    padding: 0.55rem 0.75rem;
+    cursor: text;
+    min-height: 1.5rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    border-right: 1px solid rgba(55, 113, 200, 0.12);
+    border-left: 1px solid rgba(55, 113, 200, 0.12);
+}
+
+.items-editor .editable-cell:focus {
+    outline: 2px solid rgba(55, 113, 200, 0.35);
+    background: #fff8dc;
+}
+
+.items-editor .editable-cell:empty:before {
+    content: "";
+}
+
+.items-editor td.text-end .editable-cell {
+    text-align: right;
+}
