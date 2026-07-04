@@ -1,0 +1,7 @@
+I want to be able to add more document templates. I want it to be configurable.
+For each document type, there will be: 
+A template: HTML+CSS (A4 printable) with format and placeholders.
+A Form page to fill the placeholders in the template.
+A functionality to import information to the form from files like JSON. 
+In principle I would like to create a configuration file for each template, so the app will know what form to generate, with what types of inputs and what names.
+In my Idiea I will upload the template and the config file, and the app will generate the form, the SQL tables for the history and the drafts of unfinished documents.

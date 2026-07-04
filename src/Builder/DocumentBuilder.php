@@ -99,7 +99,7 @@ class DocumentBuilder
         ];
     }
 
-    private static function normalizeItemRows(array $items, $defaultVatRate = 0): array
+    public static function normalizeItemRows(array $items, $defaultVatRate = 0): array
     {
         $normalized = [];
 
@@ -119,7 +119,7 @@ class DocumentBuilder
         return $normalized;
     }
 
-    private static function filterDocumentItems(array $items): array
+    public static function filterDocumentItems(array $items): array
     {
         $filtered = [];
 
