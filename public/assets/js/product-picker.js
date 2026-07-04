@@ -100,7 +100,7 @@
 				if (window.FormApp && window.FormApp.addItemRow) {
 					window.FormApp.addItemRow({
 						reference:    btn.dataset.ref,
-						description:  btn.dataset.name,
+						name:  btn.dataset.name,
 						product_unit: btn.dataset.unit,
 						quantity:     1,
 						unit_price:   parseFloat(btn.dataset.price) || 0,

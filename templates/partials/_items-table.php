@@ -42,7 +42,7 @@ if (!empty($fxBaseCurrency)) {
 		?>
 		<tr>
 			<td class="reference"><?= h($item['reference'] ?? '') ?></td>
-			<td class="name"><?= h($item['description'] ?? '') ?></td>
+			<td class="name"><?= h($item['name'] ?? '') ?></td>
 			<td class="product-unit"><?= h($item['product_unit'] ?? '') ?></td>
 			<td class="center"><?= h($qty) ?><?php if (!empty($item['unit'])): ?> <?= h($item['unit']) ?><?php endif; ?></td>
 			<?php if ($showFxColumns): ?>

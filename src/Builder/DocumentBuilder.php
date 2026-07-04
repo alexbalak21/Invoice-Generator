@@ -108,7 +108,7 @@ class DocumentBuilder
         foreach ($items as $item) {
             $normalized[] = [
                 'reference' => sanitize_input($item['reference'] ?? ''),
-                'description' => sanitize_input($item['description'] ?? ''),
+                'name' => sanitize_input($item['name'] ?? ''),
                 'product_unit' => sanitize_input($item['product_unit'] ?? ''),
                 'quantity' => normalize_number($item['quantity'] ?? 0),
                 'unit' => sanitize_input($item['unit'] ?? ''),
@@ -126,7 +126,7 @@ class DocumentBuilder
         $filtered = [];
 
         foreach ($items as $item) {
-            $hasContent = !empty($item['reference']) || !empty($item['description']) || normalize_number($item['quantity'] ?? 0) > 0 || normalize_number($item['unit_price'] ?? 0) > 0;
+            $hasContent = !empty($item['reference']) || !empty($item['name']) || normalize_number($item['quantity'] ?? 0) > 0 || normalize_number($item['unit_price'] ?? 0) > 0;
             if ($hasContent) {
                 $filtered[] = $item;
             }

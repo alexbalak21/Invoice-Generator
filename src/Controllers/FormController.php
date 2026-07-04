@@ -25,7 +25,7 @@ class FormController
         $defaultValidUntil  = $state['meta']['valid_until'] ?? add_days_to_date($defaultIssueDate, (int) ($company['default_quote_valid_days']  ?? 30));
 
         $defaultItems = $state['items'] ?? [
-            ['reference' => '', 'description' => '', 'product_unit' => ''],
+            ['reference' => '', 'name' => '', 'product_unit' => ''],
         ];
 
         $customer = $state['customer'] ?? [

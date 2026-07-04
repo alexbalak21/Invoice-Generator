@@ -40,7 +40,7 @@
 		document.querySelectorAll('[data-item-row]').forEach(function (row) {
 			var item = {
 				reference:    (row.querySelector('[data-field="reference"]')    || {}).textContent.trim(),
-				description:  (row.querySelector('[data-field="description"]')  || {}).textContent.trim(),
+				name:  (row.querySelector('[data-field="name"]')  || {}).textContent.trim(),
 				product_unit: (row.querySelector('[data-field="product_unit"]') || {}).textContent.trim(),
 				quantity:     parseFloat((row.querySelector('[data-field="quantity"]')   || {}).textContent) || 0,
 				unit:         (row.querySelector('[data-field="unit"]')       || {}).textContent.trim(),
@@ -49,7 +49,7 @@
 				vat_rate:     parseFloat((row.querySelector('[data-field="vat_rate"]')   || {}).textContent) || 0,
 			};
 			// Only include rows that have some data
-			if (item.reference || item.description || item.product_unit || item.quantity || item.unit || item.unit_price || item.discount || item.vat_rate) {
+			if (item.reference || item.name || item.product_unit || item.quantity || item.unit || item.unit_price || item.discount || item.vat_rate) {
 				items.push(item);
 			}
 		});
@@ -72,7 +72,7 @@
 			errors.push('At least one item is required.');
 		} else {
 			data.items.forEach(function (item, i) {
-				if (!item.description) errors.push('Item ' + (i + 1) + ': description is required.');
+				if (!item.name) errors.push('Item ' + (i + 1) + ': name is required.');
 			});
 		}
 		return { valid: errors.length === 0, errors: errors };

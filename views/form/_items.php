@@ -27,7 +27,7 @@
 					<?php foreach ($defaultItems as $index => $item): ?>
 						<tr data-item-row>
 							<td><div class="editable-cell" contenteditable="true" data-field="reference"><?= h($item['reference'] ?? '') ?></div><input type="hidden" name="items[<?= h($index) ?>][reference]" data-hidden-field="reference" value="<?= h($item['reference'] ?? '') ?>"></td>
-							<td><div class="editable-cell" contenteditable="true" data-field="description"><?= h($item['description'] ?? '') ?></div><input type="hidden" name="items[<?= h($index) ?>][description]" data-hidden-field="description" value="<?= h($item['description'] ?? '') ?>"></td>
+							<td><div class="editable-cell" contenteditable="true" data-field="name"><?= h($item['name'] ?? '') ?></div><input type="hidden" name="items[<?= h($index) ?>][name]" data-hidden-field="description" value="<?= h($item['name'] ?? '') ?>"></td>
 							<td><div class="editable-cell" contenteditable="true" data-field="product_unit"><?= h($item['product_unit'] ?? '') ?></div><input type="hidden" name="items[<?= h($index) ?>][product_unit]" data-hidden-field="product_unit" value="<?= h($item['product_unit'] ?? '') ?>"></td>
 							<td class="text-end"><div class="editable-cell" contenteditable="true" data-field="quantity"><?= h($item['quantity'] ?? 1) ?></div><input type="hidden" name="items[<?= h($index) ?>][quantity]" data-hidden-field="quantity" value="<?= h($item['quantity'] ?? 1) ?>"></td>
 							<td><div class="editable-cell" contenteditable="true" data-field="unit"><?= h($item['unit'] ?? '') ?></div><input type="hidden" name="items[<?= h($index) ?>][unit]" data-hidden-field="unit" value="<?= h($item['unit'] ?? '') ?>"></td>
@@ -44,7 +44,7 @@
 		<template id="itemRowTemplate">
 			<tr data-item-row>
 				<td><div class="editable-cell" contenteditable="true" data-field="reference"></div><input type="hidden" name="items[__INDEX__][reference]" data-hidden-field="reference" value=""></td>
-				<td><div class="editable-cell" contenteditable="true" data-field="description"></div><input type="hidden" name="items[__INDEX__][description]" data-hidden-field="description" value=""></td>
+				<td><div class="editable-cell" contenteditable="true" data-field="name"></div><input type="hidden" name="items[__INDEX__][name]" data-hidden-field="description" value=""></td>
 				<td><div class="editable-cell" contenteditable="true" data-field="product_unit"></div><input type="hidden" name="items[__INDEX__][product_unit]" data-hidden-field="product_unit" value=""></td>
 				<td class="text-end"><div class="editable-cell" contenteditable="true" data-field="quantity">1</div><input type="hidden" name="items[__INDEX__][quantity]" data-hidden-field="quantity" value="1"></td>
 				<td><div class="editable-cell" contenteditable="true" data-field="unit"></div><input type="hidden" name="items[__INDEX__][unit]" data-hidden-field="unit" value=""></td>

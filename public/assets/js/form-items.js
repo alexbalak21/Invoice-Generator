@@ -25,7 +25,7 @@
 
 	/**
 	 * Clone the item row template, populate it with data, and append it to #itemsBody.
-	 * @param {object} item   - Optional field values (reference, description, etc.)
+	 * @param {object} item   - Optional field values (reference, name, etc.)
 	 * @param {number} index  - Row index used in input names (items[N][field])
 	 */
 	function addItemRow(item, index) {
@@ -42,7 +42,7 @@
 		});
 
 		setRowFieldValue(row, 'reference', item.reference || '');
-		setRowFieldValue(row, 'description', item.description || '');
+		setRowFieldValue(row, 'name', item.name || '');
 		setRowFieldValue(row, 'product_unit', item.product_unit || '');
 		setRowFieldValue(row, 'quantity', item.quantity !== undefined ? item.quantity : 1);
 		setRowFieldValue(row, 'unit', item.unit || '');

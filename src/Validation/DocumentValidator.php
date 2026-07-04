@@ -39,9 +39,9 @@ class DocumentValidator
         }
 
         foreach ($items as $index => $item) {
-            if (empty($item['description'])) {
-                $errors[] = 'Item ' . ($index + 1) . ' description is required.';
-            }
+            if (empty($item['name'])) {
+                $errors[] = 'Item description (name) is required.';
+            }1
         }
 
         return $errors;

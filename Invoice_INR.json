@@ -29,22 +29,22 @@
   "items": [
     {
       "reference": "K0307-01",
-      "description": "PRECICE dCK Phosphorylation Assay Kit (1 plate, 96 assays)",
       "product_unit": "(1 plate, 96 assays)",
       "quantity": 1,
       "unit": "pcs",
       "unit_price": 530.0,
       "discount": 0,
-      "vat_rate": 0
+      "vat_rate": 0,
+      "name": "PRECICE dCK Phosphorylation Assay Kit"
     },
     {
       "reference": "SHIP",
-      "description": "International Shipping - FedEx (DAP Chennai)",
       "quantity": 1,
       "unit": "service",
       "unit_price": 0,
       "discount": 0,
-      "vat_rate": 0
+      "vat_rate": 0,
+      "name": "International Shipping - FedEx (DAP Chennai)"
     }
   ],
   "notes": {
