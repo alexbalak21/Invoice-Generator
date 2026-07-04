@@ -131,6 +131,14 @@
 			});
 		}
 
+		// Ensure hidden inputs and local draft are saved before page unload (refresh / navigation)
+		window.addEventListener('beforeunload', function () {
+			if (window.FormApp && window.FormApp.saveDraft) {
+				try { window.FormApp.saveDraft(); } catch (e) {}
+			}
+			syncAllRows();
+		});
+
 		document.addEventListener('keydown', function (e) {
 			var cell = e.target.closest('[data-field]');
 			if (!cell) return;
@@ -227,6 +235,14 @@
 			syncRow(cell);
 			if (window.FormApp.updateFormTotals) {
 				window.FormApp.updateFormTotals();
+			}
+
+			// Debounced save draft to localStorage
+			if (window.FormApp && window.FormApp.saveDraft) {
+				if (window._dg_save_timer) clearTimeout(window._dg_save_timer);
+				window._dg_save_timer = setTimeout(function () {
+					window.FormApp.saveDraft();
+				}, 600);
 			}
 		});
 	});

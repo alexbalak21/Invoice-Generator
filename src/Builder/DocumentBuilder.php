@@ -17,6 +17,7 @@ class DocumentBuilder
         $meta = sanitize_input($post['meta'] ?? []);
         $notes = sanitize_input($post['notes'] ?? []);
         $acceptance = sanitize_input($post['acceptance'] ?? []);
+        $terms = sanitize_input($post['terms'] ?? '');
         $items = self::normalizeItemRows($post['items'] ?? [], $defaultVatRate);
         $items = self::filterDocumentItems($items);
 
@@ -85,10 +86,11 @@ class DocumentBuilder
                 'vat_mention' => sanitize_input($meta['vat_mention'] ?? ($company['vat_mention'] ?? '')),
                 'late_payment' => sanitize_input($company['late_payment_text'] ?? ''),
                 'recovery_fee' => sanitize_input($company['late_payment_fee_text'] ?? ''),
-                'terms' => sanitize_input($company['terms_text'] ?? ''),
+                'terms' => $terms ?: sanitize_input($company['terms_text'] ?? ''),
                 // Optional: include the late-payment penalty / recovery fee mention on invoices.
                 'show_late_payment' => !empty($post['legal']['show_late_payment']),
             ],
+            'terms' => $terms,
             'notes' => [
                 'public' => sanitize_input($notes['public'] ?? ''),
                 'internal' => sanitize_input($notes['internal'] ?? ''),

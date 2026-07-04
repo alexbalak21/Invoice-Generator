@@ -159,6 +159,26 @@
 		if (window.FormApp.updateFormTotals) window.FormApp.updateFormTotals();
 	}
 
+	// Autosave draft to localStorage
+	function saveDraftToLocalStorage() {
+		try {
+			var data = gatherFormJson();
+			localStorage.setItem('dg.document_form_state', JSON.stringify(data));
+		} catch (err) {
+			// ignore
+		}
+	}
+
+	function restoreDraftFromLocalStorage() {
+		try {
+			var raw = localStorage.getItem('dg.document_form_state');
+			if (!raw) return null;
+			return JSON.parse(raw);
+		} catch (err) {
+			return null;
+		}
+	}
+
 	document.addEventListener('DOMContentLoaded', function () {
 		var importButton = document.getElementById('jsonImportButton');
 		var importInput  = document.getElementById('jsonImportInput');
@@ -200,6 +220,26 @@
 				}
 			});
 		}
+
+		// Try restore draft when loading the form if there are no item names populated
+		try {
+			var draft = restoreDraftFromLocalStorage();
+			if (draft) {
+				var anyName = false;
+				document.querySelectorAll('[data-item-row]').forEach(function (row) {
+					if ((row.querySelector('[data-field="name"]') || {}).textContent.trim()) anyName = true;
+				});
+				if (!anyName) importFormData(draft);
+			}
+		} catch (err) {}
+
+		// Clear draft when the form is submitted to generate the document
+		var formEl = document.getElementById('documentForm');
+		if (formEl) {
+			formEl.addEventListener('submit', function () {
+				localStorage.removeItem('dg.document_form_state');
+			});
+		}
 	});
 
 	// Expose for cross-module use
@@ -207,4 +247,6 @@
 	window.FormApp.validateFormJson = validateFormJson;
 	window.FormApp.downloadJson     = downloadJson;
 	window.FormApp.importFormData   = importFormData;
+	window.FormApp.saveDraft         = saveDraftToLocalStorage;
+	window.FormApp.restoreDraft      = restoreDraftFromLocalStorage;
 }());

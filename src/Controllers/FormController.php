@@ -19,6 +19,15 @@ class FormController
         $errors = $_SESSION['form_errors'] ?? [];
         unset($_SESSION['form_errors']);
 
+        // Normalize legacy item keys: some older saves used 'description' instead of 'name'.
+        if (!empty($state['items']) && is_array($state['items'])) {
+            foreach ($state['items'] as $k => $it) {
+                if (is_array($it) && !isset($it['name']) && isset($it['description'])) {
+                    $state['items'][$k]['name'] = $it['description'];
+                }
+            }
+        }
+
         $today              = date('Y-m-d');
         $defaultIssueDate   = $state['meta']['issue_date'] ?? $today;
         $defaultDueDate     = $state['meta']['due_date']    ?? add_days_to_date($defaultIssueDate, (int) ($company['default_invoice_due_days'] ?? 30));

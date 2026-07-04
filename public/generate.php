@@ -48,6 +48,7 @@ if (!empty($errors)) {
         'notes'      => $document['notes'],
         'acceptance' => $document['acceptance'],
         'legal'      => $document['legal'],
+        'terms'      => $document['terms'] ?? '',
     ];
 
     header('Location: form.php?type=' . urlencode($type));

@@ -12,14 +12,20 @@
 		if (!cell) return;
 		cell.textContent = value !== undefined && value !== null ? value : '';
 		var hidden = row.querySelector('input[data-hidden-field="' + field + '"]');
-		if (hidden) hidden.value = cell.textContent.trim();
+		if (hidden) {
+			hidden.value = cell.textContent.trim();
+			hidden.setAttribute('value', hidden.value);
+		}
 	}
 
 	function syncRowHiddenInputs(row) {
 		row.querySelectorAll('[data-field]').forEach(function (cell) {
 			var field = cell.dataset.field;
 			var hidden = row.querySelector('input[data-hidden-field="' + field + '"]');
-			if (hidden) hidden.value = cell.textContent.trim();
+			if (hidden) {
+				hidden.value = cell.textContent.trim();
+				hidden.setAttribute('value', hidden.value);
+			}
 		});
 	}
 

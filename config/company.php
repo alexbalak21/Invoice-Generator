@@ -1,6 +1,6 @@
 <?php
 return [
-    'name' => 'NOVOCIB',
+    'name' => 'NOVOCIB SAS',
     'logo' => 'img/logo.png',
 
     // Legal identity
