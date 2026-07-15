@@ -11,9 +11,10 @@ class FormController
     public static function getFormState(array $company): array
     {
         $type = strtolower(sanitize_input($_GET['type'] ?? ($_SESSION['document_form_state']['type'] ?? 'invoice')));
-        if (!in_array($type, ['invoice', 'quote'], true)) {
+        if (!in_array($type, all_document_types(), true)) {
             $type = 'invoice';
         }
+        $sections = document_sections($type);
 
         $state  = $_SESSION['document_form_state'] ?? [];
         $errors = $_SESSION['form_errors'] ?? [];
@@ -70,14 +71,29 @@ class FormController
             $meta['issue_date'] = $defaultIssueDate;
         }
 
-        if ($type === 'invoice') {
+        if ($sections['due_date']) {
             $meta['due_date']    = $state['meta']['due_date']    ?? $defaultDueDate;
-        } else {
+        }
+        if ($sections['valid_until']) {
             $meta['valid_until'] = $state['meta']['valid_until'] ?? $defaultValidUntil;
         }
 
         $notes = $state['notes'] ?? ['public' => '', 'internal' => ''];
         $terms = $state['terms'] ?? ($company['terms'] ?? '');
+
+        // Terms lines: array of {title, description} pairs
+        $defaultTermsLines = [
+            ['title' => 'Payment Terms',  'description' => '100% advance payment by wire transfer.'],
+            ['title' => 'Late Payment',   'description' => 'A fixed recovery fee of 40 € may be applied in case of late payment.'],
+            ['title' => 'Order Policy',   'description' => 'Once the order is placed, it cannot be canceled.'],
+            ['title' => 'Transport',      'description' => 'Transport via FedEx, using the customer\'s account.'],
+        ];
+        $termsLines = $state['terms_lines'] ?? $defaultTermsLines;
+
+        // Bank account selector: 'international' | 'french' | 'none'
+        $typeCfg            = document_type_config($type);
+        $bankAccountDefault = $typeCfg['bank_account_default'] ?? 'none';
+        $bankAccount        = $state['bank_account'] ?? $bankAccountDefault;
 
         // Currency is always taken from the company config — never from session / imported data
         $currency        = $company['default_currency']        ?? 'EUR';
@@ -89,9 +105,9 @@ class FormController
         $totals         = calculate_totals($defaultItems, $defaultVatRate);
 
         return compact(
-            'type', 'state', 'errors', 'today',
+            'type', 'sections', 'state', 'errors', 'today',
             'defaultIssueDate', 'defaultDueDate', 'defaultValidUntil', 'defaultItems',
-            'customer', 'meta', 'notes', 'terms',
+            'customer', 'meta', 'notes', 'terms', 'termsLines', 'bankAccount',
             'currency', 'currencySymbol', 'companyCurrency',
             'currencies', 'defaultVatRate', 'totals'
         );

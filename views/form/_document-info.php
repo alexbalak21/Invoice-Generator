@@ -10,22 +10,33 @@
 				<label class="form-label">Issue date</label>
 				<input class="form-control" type="date" name="meta[issue_date]" value="<?= h($meta['issue_date'] ?? $today) ?>" required>
 			</div>
-			<div class="col-md-6 <?= $type === 'quote' ? 'd-none' : '' ?>" data-invoice-field>
+
+			<?php if ($sections['due_date']): ?>
+			<div class="col-md-6">
 				<label class="form-label">Due date</label>
 				<input class="form-control" type="date" name="meta[due_date]" value="<?= h($meta['due_date'] ?? $defaultDueDate) ?>">
 			</div>
-			<div class="col-md-6 <?= $type === 'invoice' ? 'd-none' : '' ?>" data-quote-field>
+			<?php endif; ?>
+
+			<?php if ($sections['valid_until']): ?>
+			<div class="col-md-6">
 				<label class="form-label">Valid until</label>
 				<input class="form-control" type="date" name="meta[valid_until]" value="<?= h($meta['valid_until'] ?? $defaultValidUntil) ?>">
 			</div>
+			<?php endif; ?>
+
 			<div class="col-md-6">
 				<label class="form-label">Reference</label>
 				<input class="form-control" type="text" name="meta[reference]" value="<?= h($meta['reference'] ?? '') ?>">
 			</div>
+
+			<?php if ($sections['payment_terms']): ?>
 			<div class="col-md-6">
 				<label class="form-label">Payment method</label>
 				<input class="form-control" type="text" name="meta[payment_method]" value="<?= h($meta['payment_method'] ?? '') ?>">
 			</div>
+			<?php endif; ?>
+
 			<div class="col-md-4">
 				<label class="form-label">Invoice currency</label>
 				<select class="form-select" name="meta[currency]" id="currencySelect">
@@ -64,13 +75,17 @@
 				<label class="form-label">VAT mention</label>
 				<input class="form-control" type="text" name="meta[vat_mention]" value="<?= h($meta['vat_mention'] ?? '') ?>">
 			</div>
-			<div class="col-12 <?= $type === 'quote' ? 'd-none' : '' ?>" data-invoice-field>
+
+			<?php if ($sections['payment_terms']): ?>
+			<div class="col-12">
 				<label class="form-check-label">
 					<input class="form-check-input me-2" type="checkbox" name="legal[show_late_payment]" value="1" <?= (!isset($state['legal']['show_late_payment']) || !empty($state['legal']['show_late_payment'])) ? 'checked' : '' ?>>
 					Include late payment penalty &amp; recovery fee mention
 				</label>
 				<div class="form-text">"In the event of late payment, penalties will apply at a rate of 4.50% per year. A fixed recovery fee of 40.00 € may also apply." Untick to leave this out of the document.</div>
 			</div>
+			<?php endif; ?>
+
 		</div>
 	</div>
 </div>

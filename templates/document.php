@@ -2,7 +2,7 @@
 
 // ── Variable setup ────────────────────────────────────────────────────────────
 $type     = strtolower($document['type'] ?? 'invoice');
-$isQuote  = $type === 'quote';
+$sections = $document['sections']   ?? document_sections($type);   // section-visibility flags
 $company  = $document['company']    ?? [];
 $customer = $document['customer']   ?? [];
 $metadata = $document['metadata']   ?? [];
@@ -12,7 +12,15 @@ $legal    = $document['legal']      ?? [];
 $notes    = $document['notes']      ?? [];
 $totals   = $document['totals']     ?? [];
 $acceptance = $document['acceptance'] ?? [];
-$bank     = require __DIR__ . '/../config/bank.php';
+$termsLines  = $document['terms_lines']  ?? [];
+$bankAccount = $document['bank_account'] ?? 'none';
+
+// Load the right bank config based on what was selected on the form
+$bankConfigs = [
+    'international' => __DIR__ . '/../config/bank_int.php',
+    'french'        => __DIR__ . '/../config/bank_fr.php',
+];
+$bank = isset($bankConfigs[$bankAccount]) ? require $bankConfigs[$bankAccount] : [];
 $terms    = $document['terms']      ?? ($company['terms'] ?? '');
 
 $currencySymbol = $metadata['currency_symbol']  ?? ($document['currency_symbol']  ?? '€');
@@ -30,12 +38,15 @@ if (empty($totals)) {
 $showToolbar     = !empty($document['show_toolbar']);
 $dbId            = $document['db_id'] ?? null;
 $dbSaved         = $dbId !== null;
-$title           = $isQuote ? 'QUOTE' : 'INVOICE';
-$numberLabel     = $isQuote ? 'Quote #'    : 'Invoice #';
-$dateLabel       = $isQuote ? 'Issue Date' : 'Date';
-$dueLabel        = $isQuote ? 'Valid Until' : 'Payment Due Date';
+$title           = document_label($type);                             // e.g. "PROFORMA INVOICE"
+$pageTitle       = document_title($type);                             // e.g. "Proforma Invoice"
+$numberLabel     = $sections['valid_until'] ? 'Quote #' : 'Invoice #';
+$dateLabel       = 'Date';
+$dueLabel        = $sections['valid_until'] ? 'Valid Until' : 'Payment Due Date';
 $issueDate       = $metadata['issue_date'] ?? '';
-$secondaryDate   = $isQuote ? ($metadata['valid_until'] ?? '') : ($metadata['due_date'] ?? '');
+$secondaryDate   = $sections['valid_until']
+    ? ($metadata['valid_until'] ?? '')
+    : ($metadata['due_date']    ?? '');
 $reference       = $metadata['reference']  ?? '';
 $paymentMethod   = $payment['method']      ?? ($metadata['payment_method'] ?? '');
 $paymentTerms    = $payment['payment_terms'] ?? '';
@@ -74,6 +85,8 @@ $logoAvailable   = is_file($logoFile);
 		<div class="spacer"></div>
 
 		<?php include __DIR__ . '/partials/_legal.php'; ?>
+
+		<?php include __DIR__ . '/partials/_bank.php'; ?>
 
 		<?php include __DIR__ . '/partials/_notes.php'; ?>
 

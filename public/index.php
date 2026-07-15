@@ -1,7 +1,8 @@
 <?php
 
 require_once __DIR__ . '/../bootstrap.php';
-$company = require __DIR__ . '/../config/company.php';
+$company      = require __DIR__ . '/../config/company.php';
+$documentTypes = require __DIR__ . '/../config/document_types.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,14 +16,15 @@ $company = require __DIR__ . '/../config/company.php';
 <body class="app-shell dashboard-shell">
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
+        <div class="col-12 col-lg-8">
+
             <div class="hero-panel p-4 p-md-5 mb-4">
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-4">
                     <div>
                         <div class="eyebrow">Document Generator</div>
-                        <h1 class="display-6 fw-semibold mb-3">Create print-ready invoices and quotes.</h1>
+                        <h1 class="display-6 fw-semibold mb-3">Create print-ready documents.</h1>
                         <p class="hero-copy mb-0">
-                            A lightweight PHP prototype that keeps the existing A4 template and turns it into a reusable workflow.
+                            Invoice, quote, proforma &mdash; one template, all document types.
                         </p>
                     </div>
                     <div class="hero-meta text-md-end">
@@ -33,27 +35,38 @@ $company = require __DIR__ . '/../config/company.php';
                 </div>
             </div>
 
-            <div class="d-flex justify-content-end mb-3">
+            <div class="d-flex justify-content-end mb-4">
                 <a class="btn btn-outline-secondary btn-sm" href="history.php">&#128196; View History</a>
             </div>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <a class="action-card action-card-invoice h-100 text-decoration-none" href="invoice.php">
-                        <div class="action-card-label">Invoice</div>
-                        <h2 class="h3 mb-3 text-dark">Create Invoice</h2>
-                        <p class="text-muted mb-4">Open the Bootstrap form with invoice defaults, due date, payment method, and VAT-ready totals.</p>
-                        <span class="btn btn-primary btn-lg">Start invoice</span>
-                    </a>
-                </div>
-                <div class="col-md-6">
-                    <a class="action-card action-card-quote h-100 text-decoration-none" href="quote.php">
-                        <div class="action-card-label">Quote</div>
-                        <h2 class="h3 mb-3 text-dark">Create Quote</h2>
-                        <p class="text-muted mb-4">Use the same template system for quotations with valid-until date and acceptance text.</p>
-                        <span class="btn btn-outline-primary btn-lg">Start quote</span>
-                    </a>
-                </div>
+
+            <!-- Single "Create Document" card -->
+            <div class="action-card action-card-invoice p-4 p-md-5">
+                <div class="action-card-label mb-1">New Document</div>
+                <h2 class="h3 mb-1 text-dark">Create a document</h2>
+                <p class="text-muted mb-4">Choose a document type, then fill the form to generate a print-ready A4 PDF.</p>
+
+                <form method="get" action="form.php" class="d-flex flex-column flex-sm-row align-items-sm-end gap-3">
+
+                    <div class="flex-grow-1">
+                        <label for="docTypeSelect" class="form-label fw-semibold small text-uppercase text-muted mb-1">
+                            Document type
+                        </label>
+                        <select name="type" id="docTypeSelect" class="form-select form-select-lg">
+                            <?php foreach ($documentTypes as $key => $cfg): ?>
+                                <option value="<?= h($key) ?>"><?= h($cfg['label']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            Create &rarr;
+                        </button>
+                    </div>
+
+                </form>
             </div>
+
         </div>
     </div>
 </div>

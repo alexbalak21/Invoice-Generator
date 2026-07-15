@@ -1,4 +1,1 @@
-<?php
-
-$_GET['type'] = 'quote';
-require __DIR__ . '/form.php';
+<?php header('Location: form.php?type=quote'); exit;

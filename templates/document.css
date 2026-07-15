@@ -457,3 +457,17 @@ tr.fx-rate-row td {
     vertical-align: top;
     padding-right: 8px;
 }
+
+/* ── Terms list ────────────────────────────────────────── */
+.terms-list {
+    margin: 4px 0 0 14px;
+    padding: 0;
+    list-style: disc;
+    font-size: 10px;
+    color: var(--text-light);
+    line-height: 1.7;
+}
+
+.terms-list li {
+    margin-bottom: 1px;
+}

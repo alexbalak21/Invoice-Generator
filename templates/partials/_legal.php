@@ -4,7 +4,7 @@
 </div>
 <?php endif; ?>
 
-<?php if ($isQuote): ?>
+<?php if ($sections['acceptance']): ?>
 	<div class="payment-terms-block">
 		<strong>Quote valid until:</strong> <?= h($secondaryDate) ?>.<br>
 		<?php if (!empty($acceptance['text'])): ?>
@@ -13,7 +13,7 @@
 			Please confirm your approval before work starts.
 		<?php endif; ?>
 	</div>
-<?php else: ?>
+<?php elseif ($sections['payment_terms']): ?>
 	<div class="payment-terms-block">
 		<strong>Payment terms:</strong>
 		Due date: <?= h($secondaryDate) ?><?= !empty($paymentMethod) ? ' — ' . h($paymentMethod) . '.' : '.' ?><br>

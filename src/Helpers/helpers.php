@@ -87,12 +87,54 @@ function add_days_to_date($date, $days)
     }
 }
 
-function document_title($type)
+/**
+ * Return the full config entry for a document type (with safe fallback).
+ */
+function document_type_config(string $type): array
 {
-    return $type === 'quote' ? 'Quote' : 'Invoice';
+    static $all = null;
+    if ($all === null) {
+        $all = require __DIR__ . '/../../config/document_types.php';
+    }
+    return $all[$type] ?? $all['invoice'];
 }
 
-function document_label($type)
+/**
+ * Return the section-visibility flags for a document type.
+ * Safely merges with invoice defaults so callers can always use isset().
+ */
+function document_sections(string $type): array
 {
-    return strtoupper($type === 'quote' ? 'Quote' : 'Invoice');
+    $defaults = [
+        'bank_details'  => false,
+        'due_date'      => false,
+        'valid_until'   => false,
+        'payment_terms' => false,
+        'acceptance'    => false,
+        'terms'         => false,
+    ];
+    $cfg = document_type_config($type);
+    return array_merge($defaults, $cfg['sections'] ?? []);
+}
+
+/** Human-readable label used in form headings (e.g. "Proforma Invoice"). */
+function document_title(string $type): string
+{
+    return document_type_config($type)['label'] ?? ucfirst($type);
+}
+
+/** The big printed header on the document (e.g. "PROFORMA INVOICE"). */
+function document_label(string $type): string
+{
+    return document_type_config($type)['title_label'] ?? strtoupper($type);
+}
+
+/** All registered type keys. */
+function all_document_types(): array
+{
+    static $all = null;
+    if ($all === null) {
+        $all = require __DIR__ . '/../../config/document_types.php';
+    }
+    return array_keys($all);
 }

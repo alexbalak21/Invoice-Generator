@@ -4,35 +4,23 @@
 </div>
 <?php endif; ?>
 
-<?php if (!empty($bank)): ?>
-<div class="bank-details">
-	<strong>Bank Details</strong>
-	<table class="bank-info">
-		<tr>
-			<td class="bank-label">Beneficiary:</td>
-			<td><?= h($bank['beneficiary'] ?? '') ?></td>
-		</tr>
-		<tr>
-			<td class="bank-label">Bank name:</td>
-			<td><?= h($bank['bank_name'] ?? '') ?></td>
-		</tr>
-		<tr>
-			<td class="bank-label">Bank address:</td>
-			<td><?= h($bank['bank_address'] ?? '') ?></td>
-		</tr>
-		<tr>
-			<td class="bank-label">IBAN:</td>
-			<td><strong><?= h($bank['iban'] ?? '') ?></strong></td>
-		</tr>
-		<tr>
-			<td class="bank-label">BIC:</td>
-			<td><?= h($bank['bic'] ?? '') ?></td>
-		</tr>
-	</table>
+<?php if (!empty($termsLines)): ?>
+<div class="terms-block">
+	<strong>Terms &amp; Conditions</strong>
+	<ul class="terms-list">
+		<?php foreach ($termsLines as $line): ?>
+			<?php if (!empty($line['title']) || !empty($line['description'])): ?>
+			<li>
+				<?php if (!empty($line['title'])): ?>
+					<b><?= h($line['title']) ?></b>:
+				<?php endif; ?>
+				<?= h($line['description'] ?? '') ?>
+			</li>
+			<?php endif; ?>
+		<?php endforeach; ?>
+	</ul>
 </div>
-<?php endif; ?>
-
-<?php if (!empty($terms)): ?>
+<?php elseif (!empty($terms)): ?>
 <div class="terms-block">
 	<strong>Terms &amp; Conditions</strong>
 	<div class="terms-content"><?= h($terms) ?></div>

@@ -59,8 +59,8 @@
 
 	function validateFormJson(data) {
 		var errors = [];
-		if (!['invoice', 'quote'].includes(data.type)) {
-			errors.push('Type must be invoice or quote.');
+		if (!data.type) {
+			errors.push('Document type is missing.');
 		}
 		if (!data.customer.name)   errors.push('Customer name is required.');
 		if (!data.customer.street) errors.push('Customer street is required.');

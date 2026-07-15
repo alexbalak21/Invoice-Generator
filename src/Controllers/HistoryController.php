@@ -13,7 +13,8 @@ class HistoryController
     public static function handle(array $company): array
     {
         $action = $_GET['action'] ?? '';
-        $type   = in_array($_GET['type'] ?? '', ['invoice', 'quote'], true) ? $_GET['type'] : 'invoice';
+        $allTypes = array_keys(require __DIR__ . '/../../config/document_types.php');
+        $type   = in_array($_GET['type'] ?? '', $allTypes, true) ? $_GET['type'] : 'invoice';
         $id     = (int) ($_GET['id'] ?? 0);
 
         $flashError = null;

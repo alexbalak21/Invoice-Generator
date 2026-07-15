@@ -9,5 +9,6 @@ return [
     'bank_code' => '16807',
     'branch_code' => '00400',
     'account_number' => '81391134491',
-    'rib_key' => '09'
+    'rib_key' => '09',
+    'swift' => 'CCBPFRPPGRE',
 ];

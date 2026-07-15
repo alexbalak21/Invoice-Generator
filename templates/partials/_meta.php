@@ -5,17 +5,19 @@
 		<span><?= h($reference) ?></span>
 	</div>
 	<?php endif; ?>
+	<?php if (!empty($secondaryDate) && ($sections['due_date'] || $sections['valid_until'])): ?>
 	<div class="meta-row">
 		<span class="meta-label"><?= h($dueLabel) ?>:</span>
 		<span><?= h($secondaryDate) ?></span>
 	</div>
+	<?php endif; ?>
 	<?php if (!empty($paymentMethod)): ?>
 	<div class="meta-row">
 		<span class="meta-label">Payment method:</span>
 		<span><?= h($paymentMethod) ?></span>
 	</div>
 	<?php endif; ?>
-	<?php if (!$isQuote && !empty($paymentTerms)): ?>
+	<?php if (!$sections['acceptance'] && !empty($paymentTerms)): ?>
 	<div class="meta-row">
 		<span class="meta-label">Payment terms:</span>
 		<span><?= h($paymentTerms) ?></span>

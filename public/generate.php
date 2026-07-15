@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $type = strtolower(sanitize_input($_POST['type'] ?? 'invoice'));
-if (!in_array($type, $documentTypes, true) || !in_array($type, ['invoice', 'quote'], true)) {
+if (!in_array($type, array_keys($documentTypes), true)) {
     Logger::warning('generate.php — invalid document type, defaulting to invoice', ['type' => $type]);
     $type = 'invoice';
 }
@@ -41,14 +41,16 @@ if (!empty($errors)) {
 
     $_SESSION['form_errors']          = $errors;
     $_SESSION['document_form_state']  = [
-        'type'       => $type,
-        'customer'   => $document['customer'],
-        'meta'       => $document['metadata'],
-        'items'      => $document['items'],
-        'notes'      => $document['notes'],
-        'acceptance' => $document['acceptance'],
-        'legal'      => $document['legal'],
-        'terms'      => $document['terms'] ?? '',
+        'type'         => $type,
+        'customer'     => $document['customer'],
+        'meta'         => $document['metadata'],
+        'items'        => $document['items'],
+        'notes'        => $document['notes'],
+        'acceptance'   => $document['acceptance'],
+        'legal'        => $document['legal'],
+        'terms'        => $document['terms'] ?? '',
+        'terms_lines'  => $document['terms_lines'] ?? [],
+        'bank_account' => $document['bank_account'] ?? 'none',
     ];
 
     header('Location: form.php?type=' . urlencode($type));

@@ -5,9 +5,10 @@ class DocumentBuilder
     public static function fromPost(array $post, array $company, string $type): array
     {
         $type = strtolower(sanitize_input($type));
-        if (!in_array($type, ['invoice', 'quote'], true)) {
+        if (!in_array($type, all_document_types(), true)) {
             $type = 'invoice';
         }
+        $sections = document_sections($type);
 
         $defaultVatRate = normalize_number($company['default_vat_rate'] ?? 0);
         $defaultCurrency = sanitize_input($company['default_currency'] ?? 'EUR');
@@ -15,9 +16,23 @@ class DocumentBuilder
 
         $customer = sanitize_input($post['customer'] ?? []);
         $meta = sanitize_input($post['meta'] ?? []);
-        $notes = sanitize_input($post['notes'] ?? []);
+        $notes      = sanitize_input($post['notes'] ?? []);
         $acceptance = sanitize_input($post['acceptance'] ?? []);
-        $terms = sanitize_input($post['terms'] ?? '');
+        $terms      = sanitize_input($post['terms'] ?? '');
+
+        // Terms lines: array of ['title' => ..., 'description' => ...]
+        $rawTermsLines = $post['terms_lines'] ?? [];
+        $termsLines = [];
+        foreach ($rawTermsLines as $line) {
+            $title = trim(sanitize_input($line['title'] ?? ''));
+            $desc  = trim(sanitize_input($line['description'] ?? ''));
+            if ($title !== '' || $desc !== '') {
+                $termsLines[] = ['title' => $title, 'description' => $desc];
+            }
+        }
+
+        // Bank account: 'international' | 'french' | 'none'
+        $bankAccount = sanitize_input($post['bank_account'] ?? 'none');
         $items = self::normalizeItemRows($post['items'] ?? [], $defaultVatRate);
         $items = self::filterDocumentItems($items);
 
@@ -25,11 +40,11 @@ class DocumentBuilder
             $meta['issue_date'] = date('Y-m-d');
         }
 
-        if ($type === 'invoice' && empty($meta['due_date'])) {
+        if ($sections['due_date'] && empty($meta['due_date'])) {
             $meta['due_date'] = add_days_to_date($meta['issue_date'], (int) ($company['default_invoice_due_days'] ?? 30));
         }
 
-        if ($type === 'quote' && empty($meta['valid_until'])) {
+        if ($sections['valid_until'] && empty($meta['valid_until'])) {
             $meta['valid_until'] = add_days_to_date($meta['issue_date'], (int) ($company['default_quote_valid_days'] ?? 30));
         }
 
@@ -51,12 +66,13 @@ class DocumentBuilder
         $meta['fx_base_currency'] = $defaultCurrency;
 
 
-        $meta['payment_method'] = $meta['payment_method'] ?: ($company['default_payment_method'] ?? 'Bank Transfer');
+        $meta['payment_method'] = ($meta['payment_method'] ?? '') ?: ($company['default_payment_method'] ?? 'Bank Transfer');
 
         $totals = DocumentCalculator::calculateTotals($items, $defaultVatRate);
 
         return [
-            'type' => $type,
+            'type'     => $type,
+            'sections' => $sections,
             'company' => $company,
             'customer' => $customer,
             'items' => $items,
@@ -91,6 +107,8 @@ class DocumentBuilder
                 'show_late_payment' => !empty($post['legal']['show_late_payment']),
             ],
             'terms' => $terms,
+            'terms_lines' => $termsLines,
+            'bank_account' => $bankAccount,
             'notes' => [
                 'public' => sanitize_input($notes['public'] ?? ''),
                 'internal' => sanitize_input($notes['internal'] ?? ''),
