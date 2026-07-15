@@ -13,45 +13,37 @@
     "vat_number": "33AAAA13615G1Z6"
   },
   "meta": {
-    "number": "INV-2026-0703",
+    "number": "Q-2026-0703",
     "issue_date": "2026-07-03",
-    "due_date": "2026-07-03",
+    "due_date": "2026-08-03",
+    "valid_until": "2026-08-02",
     "reference": "",
     "payment_method": "Bank Transfer (Wire)",
     "payment_terms": "100% Advance Payment",
     "currency": "INR",
     "currency_symbol": "₹",
     "vat_mention": "VAT not applicable – export outside the European Union (Article 259 of the French Tax Code)",
-    "incoterms": "DAP Chennai (FedEx account provided by client)",
-    "hsn_code": "3822"
+    "fx_rate": "108.89"
   },
   "items": [
     {
       "reference": "K0307-01",
-      "product_unit": "(1 plate, 96 assays)",
+      "name": "PRECICE dCK Phosphorylation Assay Kit",
+      "product_unit": "1 plate (96 assays)",
       "quantity": 1,
       "unit": "pcs",
-      "unit_price": 530.0,
+      "unit_price": 530,
       "discount": 0,
-      "vat_rate": 0,
-      "name": "PRECICE dCK Phosphorylation Assay Kit"
-    },
-    {
-      "reference": "SHIP",
-      "quantity": 1,
-      "unit": "service",
-      "unit_price": 0,
-      "discount": 0,
-      "vat_rate": 0,
-      "name": "International Shipping - FedEx (DAP Chennai)"
+      "vat_rate": 0
     }
   ],
   "notes": {
-    "public": "Kits are in stock. Goods will be dispatched within 2 business days after receipt of 100% advance payment.",
+    "public": "Kits are in stock. Delivery within 2 business days after receipt of 100% advance payment. Quotation in INR as requested.",
     "internal": "Client requires Land Border form and bank details."
   },
   "acceptance": {
-    "enabled": false,
+    "enabled": true,
     "text": "Quote received before execution, read and approved, agreed."
-  }
+  },
+  "terms": ""
 }

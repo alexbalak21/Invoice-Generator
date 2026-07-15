@@ -3,207 +3,216 @@
     "ID": 1,
     "reference": "K0709-04-2",
     "name": "PRECICE® PRPP-S Assay Kit",
-    "size": "10 mL of reaction mixture (half 96-well plate)",
+    "product_unit": "10 mL of reaction mixture (half 96-well plate)",
     "price": 515,
-    "page_url": "convenient-assay-kits/prpp-s-assay-kit",
-    "updated_on": "2025-10-09"
+    "updated_on": "2025-10-09",
+    "description": ""
   },
   {
     "ID": 2,
     "reference": "K0709-01-2",
     "name": "PRECICE® HPRT Assay Kit",
-    "size": "10 mL, 24 analyses (8 samples in triplicate)",
+    "product_unit": "10 mL, 24 analyses (8 samples in triplicate)",
     "price": 420,
-    "page_url": "convenient-assay-kits/hprt-assay-kit",
-    "updated_on": "2025-10-09"
+    "updated_on": "2025-10-09",
+    "description": ""
   },
   {
     "ID": 4,
     "reference": "K0709-05-2",
     "name": "AMP Deaminase Assay Kit",
-    "size": "24 analyses (10 ml reaction buffer)",
+    "product_unit": "24 analyses (10 ml reaction buffer)",
     "price": 510,
-    "page_url": "convenient-assay-kits/ampda-assay-kit",
-    "updated_on": "2025-10-09"
+    "updated_on": "2025-10-09",
+    "description": ""
+  },
+  {
+    "ID": 5,
+    "reference": "K0709-06-2",
+    "name": "ITP-ase Assay Kit",
+    "product_unit": "10 mL of reaction mixture (half 96-well plate)",
+    "price": 440,
+    "updated_on": "2025-10-09",
+    "description": ""
   },
   {
     "ID": 6,
-    "reference": "K0709-06-2",
-    "name": "ITP-ase Assay Kit",
-    "size": "10 mL of reaction mixture (half 96-well plate)",
-    "price": 440,
-    "page_url": "convenient-assay-kits/itp-ase-assay-kit",
-    "updated_on": "2025-10-09"
+    "reference": "K0507-02",
+    "name": "ADK Phosphorylation Assay Kit",
+    "product_unit": "1 plate (96 assays)",
+    "price": 530,
+    "updated_on": "2025-10-09",
+    "description": ""
   },
   {
     "ID": 7,
-    "reference": "K0507-02",
-    "name": "ADK Phosphorylation Assay Kit",
-    "size": "1 plate (96 assays)",
+    "reference": "K0307-01",
+    "name": "dCK Phosphorylation Assay Kit",
+    "product_unit": "1 plate (96 assays)",
     "price": 530,
-    "page_url": "convenient-assay-kits/adk-phosphorylation-assay-kit",
-    "updated_on": "2025-10-09"
+    "updated_on": "2025-10-09",
+    "description": ""
   },
   {
     "ID": 8,
-    "reference": "K0307-01",
-    "name": "dCK Phosphorylation Assay Kit",
-    "size": "1 plate (96 assays)",
+    "reference": "K0507-01.01",
+    "name": "Adk Assay Kit",
+    "product_unit": "1 plate (96 assays)",
     "price": 530,
-    "page_url": "convenient-assay-kits/dck-phosphorylation-assay-kit",
-    "updated_on": "2025-10-09"
+    "updated_on": "2025-10-09",
+    "description": ""
   },
   {
     "ID": 9,
-    "reference": "K0507-01.01",
-    "name": "Adk Assay Kit",
-    "size": "1 plate (96 assays)",
-    "price": 530,
-    "page_url": "convenient-assay-kits/adk-assay-kit",
-    "updated_on": "2025-10-09"
+    "reference": "E-Nov8 25",
+    "name": "FMN-Reductase",
+    "product_unit": "25 Units",
+    "price": 440,
+    "updated_on": "2025-10-09",
+    "description": ""
+  },
+  {
+    "ID": 10,
+    "reference": "E-Nov8 50",
+    "name": "FMN-Reductase",
+    "product_unit": "50 Units",
+    "price": 705,
+    "updated_on": "2025-10-09",
+    "description": ""
   },
   {
     "ID": 11,
-    "reference": "E-Nov8 25",
+    "reference": "E-Nov8 100",
     "name": "FMN-Reductase",
-    "size": "25 Units",
-    "price": 440,
-    "page_url": "active-purified-enzymes/fmn-reductase",
-    "updated_on": "2025-10-09"
+    "product_unit": "100 Units",
+    "price": 825,
+    "updated_on": "2025-03-08",
+    "description": ""
   },
   {
     "ID": 12,
-    "reference": "E-Nov8 50",
-    "name": "FMN-Reductase",
-    "size": "50 Units",
-    "price": 705,
-    "page_url": "active-purified-enzymes/fmn-reductase",
-    "updated_on": "2025-10-09"
+    "reference": "K0700-003-12",
+    "name": "For 12 samples (microplate reader)",
+    "product_unit": "12 samples",
+    "price": 420,
+    "updated_on": "2025-06-02",
+    "description": ""
   },
   {
     "ID": 13,
-    "reference": "E-Nov8 100",
-    "name": "FMN-Reductase",
-    "size": "100 Units",
-    "price": 825,
-    "page_url": "active-purified-enzymes/fmn-reductase",
-    "updated_on": "2025-03-08"
+    "reference": "E-Nov5-100",
+    "name": "Human Adenosine Kinase",
+    "product_unit": "100 mUnits",
+    "price": 355,
+    "updated_on": "2025-07-21",
+    "description": ""
   },
   {
     "ID": 14,
-    "reference": "K0700-003-12",
-    "name": "For 12 samples (microplate reader)",
-    "size": "12 samples",
-    "price": 420,
-    "page_url": "dietary-nucleotides-assay-kits/fish-freshness-assay-kit",
-    "updated_on": "2025-06-02"
+    "reference": "E-Nov5-200",
+    "name": "Human Adenosine Kinase",
+    "product_unit": "200 mUnits",
+    "price": 625,
+    "updated_on": "2025-11-07",
+    "description": ""
   },
   {
     "ID": 15,
-    "reference": "E-Nov5-100",
-    "name": "Human Adenosine Kinase",
-    "size": "100 mUnits",
-    "price": 355,
-    "page_url": "active-purified-enzymes/recombinant-adenosine-kinase",
-    "updated_on": "2025-07-21"
+    "reference": "E-Nov3-500",
+    "name": "Human Deoxycytidine Kinase",
+    "product_unit": "500 mUnits",
+    "price": 295,
+    "updated_on": "2025-07-21",
+    "description": ""
   },
   {
     "ID": 16,
-    "reference": "E-Nov5-200",
-    "name": "Human Adenosine Kinase",
-    "size": "200 mUnits",
-    "price": 625,
-    "page_url": "convenient-assay-kits/adk-phosphorylation-assay-kit",
-    "updated_on": "2025-11-07"
+    "reference": "E-Nov3-2000",
+    "name": "Human Deoxycytidine Kinase",
+    "product_unit": "2 Units",
+    "price": 945,
+    "updated_on": "2025-07-21",
+    "description": ""
+  },
+  {
+    "ID": 17,
+    "reference": "S1200-04",
+    "name": "HPLC-UV analysis for full spectra of cellular nucleotides",
+    "product_unit": "",
+    "price": 350,
+    "updated_on": "2025-09-29",
+    "description": ""
+  },
+  {
+    "ID": 18,
+    "reference": "E-Nov6-50",
+    "name": "Human cytosolic 5'-nucleotidase II",
+    "product_unit": "50 mUnits",
+    "price": 350,
+    "updated_on": "2025-10-09",
+    "description": ""
   },
   {
     "ID": 19,
-    "reference": "E-Nov3-500",
-    "name": "Human Deoxycytidine Kinase",
-    "size": "500 mUnits",
-    "price": 295,
-    "page_url": "active-purified-enzymes/recombinant-deoxycytidine-kinase",
-    "updated_on": "2025-07-21"
+    "reference": "E-Nov6-100",
+    "name": "Human cytosolic 5'-nucleotidase II",
+    "product_unit": "100 mUnits",
+    "price": 560,
+    "updated_on": "2025-10-09",
+    "description": ""
   },
   {
     "ID": 20,
-    "reference": "E-Nov3-2000",
-    "name": "Human Deoxycytidine Kinase",
-    "size": "2 Units",
-    "price": 945,
-    "page_url": "active-purified-enzymes/recombinant-deoxycytidine-kinase",
-    "updated_on": "2025-07-21"
+    "reference": "0700-06-12",
+    "name": "PRECICE® Fishmeal IMP Assay Kit",
+    "product_unit": "(microplate reader, for 12 samples) including calibration curve with IMP",
+    "price": 190,
+    "updated_on": "2025-11-25",
+    "description": ""
+  },
+  {
+    "ID": 21,
+    "reference": "0700-06-10",
+    "name": "PRECICE® Fishmeal IMP Assay Kit",
+    "product_unit": "(spectrophotometer, for 10 samples)",
+    "price": 250,
+    "updated_on": "2025-11-25",
+    "description": ""
+  },
+  {
+    "ID": 22,
+    "reference": "E-Nov1-100",
+    "name": "Human IMPDH Type 2",
+    "product_unit": "100mU",
+    "price": 295,
+    "updated_on": "2025-12-08",
+    "description": ""
+  },
+  {
+    "ID": 23,
+    "reference": "E-Nov1-250",
+    "name": "Human IMPDH Type 2",
+    "product_unit": "250mU",
+    "price": 550,
+    "updated_on": "2025-12-08",
+    "description": ""
   },
   {
     "ID": 24,
-    "reference": "S1200-04",
-    "name": "HPLC-UV analysis for full spectra of cellular nucleotides (bases, nucleosides, NMP, NDP and NTP) in cell extracts.",
-    "size": "",
-    "price": 350,
-    "page_url": "/analytical-services/cellular-nucleotides-analysis",
-    "updated_on": "2025-09-29"
-  },
-  {
-    "ID": 30,
-    "reference": "E-Nov6-50",
-    "name": "Human cytosolic 5'-nucleotidase II",
-    "size": "50 mUnits",
-    "price": 350,
-    "page_url": "active-purified-enzymes/cn-ii",
-    "updated_on": "2025-10-09"
-  },
-  {
-    "ID": 31,
-    "reference": "E-Nov6-100",
-    "name": "Human cytosolic 5'-nucleotidase II",
-    "size": "100 mUnits",
-    "price": 560,
-    "page_url": "active-purified-enzymes/cn-ii",
-    "updated_on": "2025-10-09"
-  },
-  {
-    "ID": 32,
-    "reference": "0700-06-12",
-    "name": "PRECICE® Fishmeal IMP Assay Kit",
-    "size": "(microplate reader, for 12 samples) including calibration curve with IMP",
-    "price": 190,
-    "page_url": "freshness-assay-kits/fishmeal-imp-assay-kit",
-    "updated_on": "2025-11-25"
-  },
-  {
-    "ID": 33,
-    "reference": "0700-06-10",
-    "name": "PRECICE® Fishmeal IMP Assay Kit",
-    "size": "(spectrophotometer, for 10 samples)",
-    "price": 250,
-    "page_url": "freshness-assay-kits/fishmeal-imp-assay-kit",
-    "updated_on": "2025-11-25"
-  },
-  {
-    "ID": 38,
-    "reference": "E-Nov1-100",
+    "reference": "E-Nov1",
     "name": "Human IMPDH Type 2",
-    "size": "100mU",
-    "price": 295,
-    "page_url": "active-purified-enzymes/human-recombinant-impdh",
-    "updated_on": "2025-12-08"
+    "product_unit": "100mU",
+    "price": 295.00,
+    "updated_on": "2025-12-08",
+    "description": ""
   },
   {
-    "ID": 39,
-    "reference": "E-Nov1-250",
-    "name": "Human IMPDH Type 2",
-    "size": "250mU",
-    "price": 550,
-    "page_url": "active-purified-enzymes/human-recombinant-impdh",
-    "updated_on": "2025-12-08"
-  },
-  {
-    "ID": 40,
-    "reference": "Screening E-Nov1",
+    "ID": 25,
+    "reference": "SCR-IMPDH2",
     "name": "Human Recombinant IMPDH2 Screening Service",
-    "size": "IC50 determination for new compounds, performed in duplicate, with mycophenolic acid as the positive control.",
+    "product_unit": "100mU",
     "price": 590,
-    "page_url": "active-purified-enzymes/human-recombinant-impdh",
-    "updated_on": "2025-12-08"
+    "updated_on": "2025-12-08",
+    "description": "IC50 determination for new compounds, performed in duplicate with 10 concentrations of the compound. The assay is performed in a 96-well plate format using a spectrophotometer. The customer receives a report with the IC50 value and a graph of the inhibition curve."
   }
 ]
